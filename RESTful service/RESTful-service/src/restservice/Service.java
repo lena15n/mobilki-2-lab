@@ -45,9 +45,14 @@ public class Service {
         return Response.status(200).entity(result).build();
     }
 
+    @POST// TODO: add impl of this
+    @Path("/send-meeting")//@Consumes(MediaType.APPLICATION_JSON)
+    public Response postMeeting(@PathParam("name") String name) {
+        String output = "ff";
+        return Response.status(200).entity(output).build();
+    }
 
-
-    @PUT//!!!!!!!!
+    @PUT//!!!
     @Path("/{name}")//@Consumes(MediaType.APPLICATION_JSON)
     public Response putMeeting(@PathParam("name") String name) {
         //http://localhost:8080/sampel-glassfish-0.0.1-SNAPSHOT/crunchify/meetings/azaza
