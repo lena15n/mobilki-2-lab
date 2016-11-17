@@ -1,9 +1,14 @@
-package restservice;
+package restservice.meetings;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class Meeting {
+    public static String CRITICAL = "Critical";
+    public static String PLAN = "Plan";
+    public static String NORMAL = "Normal";
+
     private String name;
     private String description;
     private Date startDate;

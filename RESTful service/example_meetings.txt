@@ -1,0 +1,35 @@
+[
+  {
+    "name": "новая_встреча",
+    "description": "new meet",
+    "startDate": 1479406247698,
+    "endDate": 1479406247698,
+    "participants": [
+      "part1",
+      "part2"
+    ],
+    "priority": "HIGHT"
+  },
+  {
+    "name": "aaa",
+    "description": "new meet",
+    "startDate": 1479406493089,
+    "endDate": 1479406493089,
+    "participants": [
+      "part1",
+      "part2"
+    ],
+    "priority": "HIGHT"
+  },
+  {
+    "name": "azaza",
+    "description": "new meet",
+    "startDate": 1479406607521,
+    "endDate": 1479406607521,
+    "participants": [
+      "part1",
+      "part2"
+    ],
+    "priority": "HIGHT"
+  }
+]

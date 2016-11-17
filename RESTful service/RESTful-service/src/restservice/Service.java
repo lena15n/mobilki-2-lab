@@ -2,23 +2,26 @@ package restservice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.jersey.spi.inject.Inject;
 import com.sun.jersey.spi.resource.Singleton;
+import restservice.meetings.Meeting;
+import restservice.meetings.MeetingsManager;
+import restservice.participants.ParticipantsManager;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Singleton
 @Path("/meetings")
 public class Service {
-   // @Context
-   // @Inject
     MeetingsManager meetingsManager;
+    ParticipantsManager participantsManager;
 
     public Service() {
         meetingsManager = new MeetingsManager();
+        participantsManager = new ParticipantsManager();
     }
 
     @GET
@@ -39,24 +42,19 @@ public class Service {
             result = e.getMessage();
         }
 
-        /* throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        MeetingsManager meetingsManager = new MeetingsManager();
-
-        jsonObject.put(meetingsManager.getMeetings());
-
-        String result = "" + jsonObject;*/
         return Response.status(200).entity(result).build();
     }
 
-    @PUT
-    @Path("/{param}")
-    public Response putMeeting(@PathParam("param") String name) {
+    @PUT//!!!!!!!!
+    @Path("/{name}")//@Consumes(MediaType.APPLICATION_JSON)
+    public Response putMeeting(@PathParam("name") String name) {
         //http://localhost:8080/sampel-glassfish-0.0.1-SNAPSHOT/crunchify/meetings/azaza
-        meetingsManager.addMeeting(name);
+        ArrayList<String> participants = new ArrayList<>();
+        participants.add("part1");
+        participants.add("part2");
+        meetingsManager.addMeeting(new Meeting(name, "desc", new Date(), new Date(), participants, Meeting.PLAN));
+
         String output = "PUT: Jersey say : " + name + "\n meeting has created";
         return Response.status(200).entity(output).build();
     }
-
-
 }
