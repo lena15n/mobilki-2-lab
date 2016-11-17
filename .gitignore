@@ -38,3 +38,7 @@ captures/
 
 # Keystore files
 *.jks
+RESTful service/RESTful-service/target/
+RESTful service/RESTful-service/.idea/
+RESTful service/RESTful-service-project/.idea/
+RESTful service/RESTful-service-project/sources/target/
