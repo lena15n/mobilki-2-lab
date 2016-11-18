@@ -16,6 +16,10 @@ public class Meeting {
     private ArrayList<String> participants;
     private String priority;
 
+    public Meeting(){
+        //for json in PUT method
+    }
+
     public Meeting(String name, String description, Date startDate, Date endDate, ArrayList<String> participants,
                    String priority) {
         this.name = name;
