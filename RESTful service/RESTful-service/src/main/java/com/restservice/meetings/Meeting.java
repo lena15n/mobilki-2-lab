@@ -1,6 +1,5 @@
-package restservice.meetings;
+package com.restservice.meetings;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 

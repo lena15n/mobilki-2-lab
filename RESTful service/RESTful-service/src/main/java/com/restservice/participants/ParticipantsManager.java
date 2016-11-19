@@ -1,4 +1,4 @@
-package restservice.participants;
+package com.restservice.participants;
 
 import java.util.ArrayList;
 

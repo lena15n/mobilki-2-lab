@@ -1,6 +1,4 @@
-package restservice.participants;
-
-import java.math.BigInteger;
+package com.restservice.participants;
 
 public class Participant {
     public static String VASYA_PUP = "Gosha Rubchinskii";
