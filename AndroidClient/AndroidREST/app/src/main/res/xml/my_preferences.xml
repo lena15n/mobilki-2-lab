@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:title="@string/title_activity_settings">
+    <PreferenceCategory
+        android:key="pref_key_storage_settings_general"
+        android:title="@string/settings_general">
+        <EditTextPreference
+            android:key="pref_login"
+            android:title="@string/login"
+            android:dialogTitle="@string/auth_enter_login"
+            android:summary="@string/login"/>
+        <EditTextPreference
+            android:key="pref_password"
+            android:title="@string/password"
+            android:dialogTitle="@string/auth_enter_password"
+            android:summary="@string/password"
+            android:inputType="textPassword"/>
+        </PreferenceCategory>
+</PreferenceScreen>
