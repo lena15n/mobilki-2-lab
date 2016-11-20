@@ -6,7 +6,9 @@
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="auth_enter_login">Enter your login:</string>
-    <string name="auth_enter_password">Enter your password:</string><!--
-    <string name="login">Login: </string>
-    <string name="password">Password: </string>-->
+    <string name="auth_enter_password">Enter your password:</string>
+    <string name="header">This is an useful app for meetings management</string>
+    <string name="create_meeting">Create New Meeting</string>
+    <string name="open_meetings">See all meetings</string>
+    <string name="find_meeting">Find the meeting</string>
 </resources>
