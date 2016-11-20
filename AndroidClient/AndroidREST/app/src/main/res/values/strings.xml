@@ -1,14 +1,23 @@
 <resources>
     <string name="app_name">AndroidREST</string>
     <string name="settings">Settings</string>
+
     <string name="title_activity_settings">Settings</string>
     <string name="settings_general">Authentication</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="auth_enter_login">Enter your login:</string>
     <string name="auth_enter_password">Enter your password:</string>
+
     <string name="header">This is an useful app for meetings management</string>
     <string name="create_meeting">Create New Meeting</string>
     <string name="open_meetings">See all meetings</string>
     <string name="find_meeting">Find the meeting</string>
+
+    <string name="meeting_name">Name: </string>
+    <string name="meeting_description">Description: </string>
+    <string name="meeting_start">Start date: </string>
+    <string name="meeting_end">End date: </string>
+    <string name="meeting_participants">Participants: </string>
+    <string name="meeting_priority">Priority: </string>
 </resources>
