@@ -18,7 +18,6 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.internal.util.Base64;
 
@@ -34,10 +33,6 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
 
     private static final String AUTHORIZATION_PROPERTY = "Authorization";
     private static final String AUTHENTICATION_SCHEME = "Basic";
-    /*private static  Response.ResponseBuilder ACCESS_DENIED = Response.status(Response.Status.UNAUTHORIZED)
-            .entity("You cannot access this resource");//.build();
-    private static  Response.ResponseBuilder ACCESS_FORBIDDEN = Response.status(Response.Status.FORBIDDEN)
-            .entity("Access blocked for all users !!");//.build();*/
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
@@ -46,35 +41,31 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
         if (!method.isAnnotationPresent(PermitAll.class)) {
             //Access denied for all
             if (method.isAnnotationPresent(DenyAll.class)) {
-                throw new NotAuthorizedException("я вас не звал идите нахер НЕ АВТОРИЗОВАН");//throw new WebApplicationException(ACCESS_FORBIDDEN.build());
+                throw new NotAuthorizedException("Not authorized");
             }
 
             //Get request headers
             final MultivaluedMap<String, String> headers = requestContext.getHeaders();
-
             //Fetch authorization header
             final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
 
             //If no authorization information present; block access
             if (authorization == null || authorization.isEmpty()) {
-                throw new NotAuthorizedException("НЕ АВТОРИЗОВАН");//throw new WebApplicationException(ACCESS_DENIED.build());
+                throw new NotAuthorizedException("Not authorized");
             }
 
             //Get encoded username and password
             final String encodedUserPassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
-
             //Decode username and password
             String usernameAndPassword = new String(Base64.decode(encodedUserPassword.getBytes()));
-            ;
+            if (usernameAndPassword.endsWith(":") || usernameAndPassword.startsWith(":") || usernameAndPassword.equals("")){
+                throw new NotAuthorizedException("Access denied: empty password and login");
+            }
 
             //Split username and password tokens
             final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
             final String username = tokenizer.nextToken();
             final String password = tokenizer.nextToken();
-
-            //Verifying Username and password
-            System.out.println(username);
-            System.out.println(password);
 
             //Verify user access
             if (method.isAnnotationPresent(RolesAllowed.class)) {
@@ -83,7 +74,7 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
 
                 //Is user valid?
                 if (!isUserAllowed(username, password, rolesSet)) {
-                    throw new NotAuthorizedException("АКес денайд");//throw new WebApplicationException(ACCESS_DENIED.build());
+                    throw new NotAuthorizedException("Access denied");
                 }
             }
         }
@@ -97,7 +88,7 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
         //Access the database and do this part yourself
         //String userRole = userMgr.getUserRole(username);
 
-        if (username.equals("loggi") && password.equals("passi")) {
+        if (username.equals("user") && password.equals("admin")) {
             String userRole = "ADMIN";
 
             //Step 2. Verify user role
