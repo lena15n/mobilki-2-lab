@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:title="@string/title_activity_settings">
+                  android:title="@string/settings_activity_title">
     <PreferenceCategory
         android:key="pref_key_storage_settings_general"
         android:title="@string/settings_general">
         <EditTextPreference
             android:key="pref_login"
-            android:title="@string/login"
-            android:dialogTitle="@string/auth_enter_login"
-            android:summary="@string/login"/>
+            android:title="@string/settings_login"
+            android:dialogTitle="@string/settings_auth_enter_login"
+            android:summary="@string/settings_login"/>
         <EditTextPreference
             android:key="pref_password"
-            android:title="@string/password"
-            android:dialogTitle="@string/auth_enter_password"
-            android:summary="@string/password"
+            android:title="@string/settings_password"
+            android:dialogTitle="@string/settings_auth_enter_password"
+            android:summary="@string/settings_password"
             android:inputType="textPassword"/>
+        <EditTextPreference
+            android:key="pref_fio"
+            android:title="@string/settings_fio"
+            android:dialogTitle="@string/settings_enter_fio"
+            android:summary="@string/settings_fio"/>
+        <EditTextPreference
+            android:key="pref_post"
+            android:title="@string/settings_post"
+            android:dialogTitle="@string/settings_enter_post"
+            android:summary="@string/settings_post"/>
         </PreferenceCategory>
 </PreferenceScreen>

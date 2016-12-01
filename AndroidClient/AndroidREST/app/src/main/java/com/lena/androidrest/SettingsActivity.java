@@ -32,6 +32,18 @@ public class SettingsActivity extends PreferenceActivity {
             if (value != null) {
                 preferenceLogin.setSummary(value);
             }
+
+            EditTextPreference preferenceFio = (EditTextPreference) findPreference("pref_fio");
+            value = preferenceFio.getText();
+            if (value != null) {
+                preferenceFio.setSummary(value);
+            }
+
+            EditTextPreference preferencePost = (EditTextPreference) findPreference("pref_post");
+            value = preferencePost.getText();
+            if (value != null) {
+                preferencePost.setSummary(value);
+            }
         }
 
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,12 +57,25 @@ public class SettingsActivity extends PreferenceActivity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.equals("pref_login")) {
-                EditTextPreference preference = (EditTextPreference) findPreference(key);
-                preference.setSummary(sharedPreferences.getString(key, ""));
-            }
-            else if (key.equals("pref_password")) {
-                //keep hidden summary
+            switch(key) {
+                case "pref_login": {
+                    EditTextPreference preference = (EditTextPreference) findPreference(key);
+                    preference.setSummary(sharedPreferences.getString(key, ""));
+                } break;
+
+                case "pref_fio": {
+                    EditTextPreference preference = (EditTextPreference) findPreference(key);
+                    preference.setSummary(sharedPreferences.getString(key, ""));
+                } break;
+
+                case "pref_post": {
+                    EditTextPreference preference = (EditTextPreference) findPreference(key);
+                    preference.setSummary(sharedPreferences.getString(key, ""));
+                } break;
+
+                case "pref_password": {
+                    //keep hidden summary
+                } break;
             }
         }
 

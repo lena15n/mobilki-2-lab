@@ -17,7 +17,8 @@
         android:text="@string/header"
         android:layout_centerInParent="false"
         android:layout_centerHorizontal="true"
-        android:padding="16dp"/>
+        android:padding="16dp"
+        style="@style/FontHeader"/>
 
     <LinearLayout
         android:orientation="vertical"

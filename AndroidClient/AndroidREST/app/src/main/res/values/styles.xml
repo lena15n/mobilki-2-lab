@@ -6,6 +6,19 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textViewStyle">@style/Font</item>
+    </style>
+
+    <style name="Font" parent="@android:style/TextAppearance.Small">
+       <!-- <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">@color/colorText</item>
+        &lt;!&ndash;<item name="android:typeface">monospace</item>&ndash;&gt;
+        <item name="android:textSize">20sp</item>-->
+    </style>
+
+    <style name="FontHeader" parent="@android:style/TextAppearance.Small">
+        <item name="android:textSize">20sp</item>
     </style>
 
 </resources>
