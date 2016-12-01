@@ -1,6 +1,6 @@
 package com.lena.androidrest;
 
-import android.app.Dialog;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,15 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-public class CreateMeetingActivity extends AppCompatActivity implements TimePicker.OnTimeChangedListener{
+public class CreateMeetingActivity extends AppCompatActivity {
     private Button createButton;
     private Context mContext;
-    //private
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +49,25 @@ public class CreateMeetingActivity extends AppCompatActivity implements TimePick
         ArrayAdapter arrayAdapter = ArrayAdapter.createFromResource(this, R.array.priorities, R.layout.spinner_item);
         prioritiesSpinner.setAdapter(arrayAdapter);
 
-        Dialog dialog = new Dialog(mContext);
-        dialog.setContentView(R.layout.date_time_picker_layout);
-        dialog.setTitle("Custom Dialog");
-        TimePicker timePicker = (TimePicker)dialog.findViewById(R.id.date_time_timePicker);
-        timePicker.setOnTimeChangedListener(this);
+        TextView startDateTextView = (TextView) findViewById(R.id.meeting_start_date_textview);
+        startDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getFragmentManager();
+                DatePickerFragment datePickerFragment = new DatePickerFragment();
+                datePickerFragment.show(fragmentManager, getString(R.string.meeting_enter_start_date));
+            }
+        });
 
+        TextView endDateTextView = (TextView) findViewById(R.id.meeting_end_date_textview);
+        endDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getFragmentManager();
+                DatePickerFragment datePickerFragment = new DatePickerFragment();
+                datePickerFragment.show(fragmentManager, getString(R.string.meeting_enter_end_date));
+            }
+        });
 
     }
 
@@ -67,9 +79,13 @@ public class CreateMeetingActivity extends AppCompatActivity implements TimePick
 
     }
 
+    public void onStartDataSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        TextView startDateTextView = (TextView) findViewById(R.id.meeting_start_date_textview);
+        startDateTextView.setText(dayOfMonth + "." + String.valueOf(monthOfYear + 1) + "." + year);
+    }
 
-    @Override
-    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-
+    public void onEndDataSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        TextView endDateTextView = (TextView) findViewById(R.id.meeting_end_date_textview);
+        endDateTextView.setText(dayOfMonth + "." + String.valueOf(monthOfYear + 1) + "." + year);
     }
 }
