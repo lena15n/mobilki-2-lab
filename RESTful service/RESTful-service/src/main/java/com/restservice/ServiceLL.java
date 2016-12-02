@@ -3,9 +3,9 @@ package com.restservice;
 import com.restservice.meetings.Meeting;
 import com.restservice.meetings.MeetingsManager;
 import com.restservice.participants.ParticipantsManager;
-import com.sun.jersey.spi.resource.Singleton;
 
 import javax.annotation.security.RolesAllowed;
+import javax.inject.Singleton;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
