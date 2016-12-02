@@ -33,6 +33,8 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
 
     private static final String AUTHORIZATION_PROPERTY = "Authorization";
     private static final String AUTHENTICATION_SCHEME = "Basic";
+    public static final String USERNAME = "user";
+    public static final String PASSWORD = "admin";
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
@@ -88,7 +90,7 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
         //Access the database and do this part yourself
         //String userRole = userMgr.getUserRole(username);
 
-        if (username.equals("user") && password.equals("admin")) {
+        if (username.equals(USERNAME) && password.equals(PASSWORD)) {
             String userRole = "ADMIN";
 
             //Step 2. Verify user role

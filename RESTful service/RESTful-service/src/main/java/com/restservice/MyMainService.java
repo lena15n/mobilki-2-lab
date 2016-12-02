@@ -14,11 +14,11 @@ import java.util.List;
 
 @Singleton
 @Path("/meetings")
-public class ServiceLL {
+public class MyMainService {
     MeetingsManager meetingsManager;
     ParticipantsManager participantsManager;
 
-    public ServiceLL() {
+    public MyMainService() {
         meetingsManager = new MeetingsManager();
         participantsManager = new ParticipantsManager();
     }
