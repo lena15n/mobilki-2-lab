@@ -28,7 +28,6 @@ public class CreateMeetingActivity extends AppCompatActivity {
     private Date startDate;
     private Date endDate;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,37 +37,13 @@ public class CreateMeetingActivity extends AppCompatActivity {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //send meeting
                 mContext = getApplicationContext();
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-                String userFio = sharedPreferences.getString("pref_fio", "");
-                String userPost = sharedPreferences.getString("pref_post", "");
-                if (!userFio.equals("") && !userPost.equals("")) {
-                    ArrayList<String> participants = new ArrayList<>();
-                    participants.add(userFio + ", " + userPost);
-                    String meetingName = ((TextView)findViewById(R.id.meeting_name_edittext)).getText().toString();
-                    String meetingDescription = ((TextView)findViewById(R.id.meeting_desc_edittext)).getText().toString();
-                    Spinner spinner = (Spinner) findViewById(R.id.meeting_priority_spinner);
-                    String meetingPriority = spinner.getSelectedItem().toString();
+                Meeting newMeeting = prepareNewMeeting(mContext);
 
-                    if (startDate.before(endDate)) {
-                        Meeting newMeeting = new Meeting(meetingName, meetingDescription, startDate, endDate, participants, meetingPriority);
-
-                        Gson gson = new Gson();
-                        String obj = gson.toJson(newMeeting);
-                        Log.i("GSON", gson.toJson(obj));
-
-                    }
-                    else {
-                        Toast.makeText(mContext, R.string.meeting_startdate_should_be_before, Toast.LENGTH_LONG).show();
-                    }
+                if (newMeeting != null) {
+                    String newMeetingJSON = meetingToJSON(newMeeting);
+                    sendMeetingToServer(newMeetingJSON);
                 }
-                else {
-                    Toast.makeText(mContext, R.string.meeting_fill_userdata, Toast.LENGTH_LONG).show();
-                }
-
-
-
             }
         });
 
@@ -105,7 +80,6 @@ public class CreateMeetingActivity extends AppCompatActivity {
         super.onResume();
 
 
-
     }
 
     public void onStartDataSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -124,5 +98,41 @@ public class CreateMeetingActivity extends AppCompatActivity {
 
         TextView endDateTextView = (TextView) findViewById(R.id.meeting_end_date_textview);
         endDateTextView.setText(dayOfMonth + "." + String.valueOf(monthOfYear + 1) + "." + year);
+    }
+
+    private Meeting prepareNewMeeting(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String userFio = sharedPreferences.getString("pref_fio", "");
+        String userPost = sharedPreferences.getString("pref_post", "");
+        if (!userFio.equals("") && !userPost.equals("")) {
+            ArrayList<String> participants = new ArrayList<>();
+            participants.add(userFio + ", " + userPost);
+            String meetingName = ((TextView) findViewById(R.id.meeting_name_edittext)).getText().toString();
+            String meetingDescription = ((TextView) findViewById(R.id.meeting_desc_edittext)).getText().toString();
+            Spinner spinner = (Spinner) findViewById(R.id.meeting_priority_spinner);
+            String meetingPriority = spinner.getSelectedItem().toString();
+
+            if (startDate.before(endDate)) {
+                return new Meeting(meetingName, meetingDescription, startDate, endDate, participants, meetingPriority);
+            } else {
+                Toast.makeText(mContext, R.string.meeting_startdate_should_be_before, Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(mContext, R.string.meeting_fill_userdata, Toast.LENGTH_LONG).show();
+        }
+
+        return null;
+    }
+
+    private String meetingToJSON(Meeting meeting) {
+        Gson gson = new Gson();
+        String meetingJSON = gson.toJson(meeting);
+
+        Log.i("GSON", gson.toJson(meetingJSON));
+        return  meetingJSON;
+    }
+
+    private void sendMeetingToServer(String meetingJSON) {
+        //PutTask
     }
 }
