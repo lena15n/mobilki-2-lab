@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,9 +15,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.lena.androidrest.dataobjects.Meeting;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 public class CreateMeetingActivity extends AppCompatActivity {
     private Button createButton;
     private Context mContext;
+    private Date startDate;
+    private Date endDate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +43,30 @@ public class CreateMeetingActivity extends AppCompatActivity {
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
                 String userFio = sharedPreferences.getString("pref_fio", "");
                 String userPost = sharedPreferences.getString("pref_post", "");
-                String meetingName = ((TextView)findViewById(R.id.meeting_name_textview)).getText().toString();
-                String meetingDescription = ((TextView)findViewById(R.id.meeting_desc_textview)).getText().toString();
-                Spinner spinner = (Spinner) findViewById(R.id.meeting_priority_spinner);
-                String meetingPriority = spinner.getSelectedItem().toString();
-                Toast.makeText(mContext, meetingPriority, Toast.LENGTH_SHORT).show();
-                //Date startDate = (TextView) findViewById(R.id.meeting_start_edittext).get
+                if (!userFio.equals("") && !userPost.equals("")) {
+                    ArrayList<String> participants = new ArrayList<>();
+                    participants.add(userFio + ", " + userPost);
+                    String meetingName = ((TextView)findViewById(R.id.meeting_name_edittext)).getText().toString();
+                    String meetingDescription = ((TextView)findViewById(R.id.meeting_desc_edittext)).getText().toString();
+                    Spinner spinner = (Spinner) findViewById(R.id.meeting_priority_spinner);
+                    String meetingPriority = spinner.getSelectedItem().toString();
+
+                    if (startDate.before(endDate)) {
+                        Meeting newMeeting = new Meeting(meetingName, meetingDescription, startDate, endDate, participants, meetingPriority);
+
+                        Gson gson = new Gson();
+                        String obj = gson.toJson(newMeeting);
+                        Log.i("GSON", gson.toJson(obj));
+
+                    }
+                    else {
+                        Toast.makeText(mContext, R.string.meeting_startdate_should_be_before, Toast.LENGTH_LONG).show();
+                    }
+                }
+                else {
+                    Toast.makeText(mContext, R.string.meeting_fill_userdata, Toast.LENGTH_LONG).show();
+                }
+
 
 
             }
@@ -80,11 +109,19 @@ public class CreateMeetingActivity extends AppCompatActivity {
     }
 
     public void onStartDataSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, monthOfYear, dayOfMonth, 0, 0);
+        startDate = calendar.getTime();
+
         TextView startDateTextView = (TextView) findViewById(R.id.meeting_start_date_textview);
         startDateTextView.setText(dayOfMonth + "." + String.valueOf(monthOfYear + 1) + "." + year);
     }
 
     public void onEndDataSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, monthOfYear, dayOfMonth, 0, 0);
+        endDate = calendar.getTime();
+
         TextView endDateTextView = (TextView) findViewById(R.id.meeting_end_date_textview);
         endDateTextView.setText(dayOfMonth + "." + String.valueOf(monthOfYear + 1) + "." + year);
     }

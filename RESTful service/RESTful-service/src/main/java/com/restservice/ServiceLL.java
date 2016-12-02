@@ -37,6 +37,7 @@ public class ServiceLL {
     @Consumes("application/json")
     public Response putOneMeeting(Meeting jsonMeeting) {
         meetingsManager.addMeeting(jsonMeeting);
+        ArrayList<Meeting> meetings = meetingsManager.getMeetings();
         String out = "Meeting '" + jsonMeeting.getName() + "' was added!\n";
         return Response.status(200).entity(out).build();
     }

@@ -31,6 +31,5 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         else if (getTag().equals(getString(R.string.meeting_enter_end_date))) {
             ((CreateMeetingActivity) getActivity()).onEndDataSet(view, year, monthOfYear, dayOfMonth);
         }
-
     }
 }

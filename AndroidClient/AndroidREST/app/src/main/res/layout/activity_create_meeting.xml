@@ -75,6 +75,7 @@
                     android:text="@string/meeting_description"/>
 
                 <EditText
+                    android:id="@+id/meeting_desc_edittext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
