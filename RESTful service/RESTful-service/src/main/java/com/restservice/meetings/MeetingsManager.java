@@ -5,7 +5,6 @@ import com.restservice.participants.Participant;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 public class MeetingsManager {
     private static ArrayList<Meeting> meetings;
 
