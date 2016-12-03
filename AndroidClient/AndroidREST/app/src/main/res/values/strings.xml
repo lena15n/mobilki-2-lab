@@ -36,6 +36,9 @@
     <string name="meeting_textview_end_date">(Tap to choose end date)</string>
     <string name="meeting_fill_userdata">Fill your name and post in settings first</string>
     <string name="meeting_startdate_should_be_before">Start date should be before end date of the meeting</string>
+    <string name="meeting_result_ok">Meeting has been added successfully</string>
+    <string name="meeting_result_not_ok">Some problems, try again</string>
+    <string name="meeting_result_not_ok_internet">Turn on internet connection</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

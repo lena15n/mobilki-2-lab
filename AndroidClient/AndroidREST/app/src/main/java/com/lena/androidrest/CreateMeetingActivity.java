@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lena.androidrest.dataobjects.Meeting;
+import com.lena.androidrest.net.PutTask;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -133,6 +134,6 @@ public class CreateMeetingActivity extends AppCompatActivity {
     }
 
     private void sendMeetingToServer(String meetingJSON) {
-        //PutTask
+        new PutTask(mContext).execute(meetingJSON);
     }
 }
