@@ -6,9 +6,10 @@ import android.os.AsyncTask;
 import android.util.Base64;
 import android.widget.Toast;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -22,32 +23,29 @@ public class PutTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        String meetingJSON = params[0];
-        meetingJSON = "{\"description\":\"u u u looks like shit when u dance\",\"endDate\":\"2016-12-03T14:32:08.957+04:00\",\"name\":\"Meeting\",\"participants\":[\"Galya Smith\",\"Artemii Lebedev\"],\"priority\":\"Critical\",\"startDate\":\"2016-12-03T14:32:08.957+04:00\"}";/*= "[\n" +
-                "  {\n" +
-                "    \"description\": \"This is new meeting!\",\n" +
-                "    \"endDate\": \"2016-12-03T14:28:59.876+04:00\",\n" +
-                "    \"name\": \"Meeting\",\n" +
-                "    \"participants\": [\n" +
-                "      \"Galya Smith\",\n" +
-                "      \"Artemii Lebedev\"\n" +
-                "    ],\n" +
-                "    \"priority\": \"Critical\",\n" +
-                "    \"startDate\": \"2016-12-03T14:28:59.876+04:00\"\n" +
-                "  }\n" +
-                "]";*/
+        String urlString = params[0];
+        String login = params[1];
+        String password = params[2];
+        String meetingJSON1 = params[3];
+        String meetingJSON = "";
+        byte ptext[] = new byte[0];
+        try {
+            ptext = meetingJSON1.getBytes();
+            meetingJSON = new String(ptext, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
-        //"{\"description\": \"desc of meet \",\"endDate\":\"Dec 10, 2016 00:00:34\",\"name\":\"MEEETT\",\"participants\":[\"pa1, pa2\"],\"priority\":\"Plan\",\"startDate\":\"Dec 3, 2016 00:00:36\"}";//URLEncoder.encode(meetingJSON, "utf-8");
-
-        byte[] bytes = meetingJSON.getBytes();
+      //  String f = Charset.forName("UTF-8").encode(meetingJSON);
 
         URL url;
-        OutputStreamWriter out = null;
+        OutputStreamWriter outin;
         HttpURLConnection httpConnection = null;
-        String basicAuth = "Basic " + Base64.encodeToString("user:admin".getBytes(), Base64.NO_WRAP);
+        String basicAuthData = login + ":" + password;
+        String basicAuth = "Basic " + Base64.encodeToString(basicAuthData.getBytes(), Base64.NO_WRAP);
 
         try {
-            url = new URL("http://89f39319.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/send-meeting");
+            url = new URL(urlString);
 
             httpConnection = (HttpURLConnection) url.openConnection();
             httpConnection.setDoOutput(true);
@@ -56,20 +54,13 @@ public class PutTask extends AsyncTask<String, Void, String> {
             httpConnection.setRequestProperty("Content-Type", "application/json");
             httpConnection.setUseCaches(false);
 
-            out = new OutputStreamWriter(httpConnection.getOutputStream());
+            //outin = new OutputStreamWriter(httpConnection.getOutputStream());
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(httpConnection.getOutputStream(), "UTF-8"));
             out.write(meetingJSON);
             out.close();
 
             int responseCode = httpConnection.getResponseCode();
             fullResponseMessage = "" + responseCode + ": " + httpConnection.getResponseMessage();
-
-
-            if (responseCode >= 400 && responseCode <= 499) {
-                //provide a more meaningful exception message
-            }
-            else {
-                InputStream in = httpConnection.getInputStream();
-            }
 
             return fullResponseMessage;
 

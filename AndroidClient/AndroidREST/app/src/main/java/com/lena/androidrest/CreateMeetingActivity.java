@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class CreateMeetingActivity extends AppCompatActivity {
+    private static final String URL = "http://89f39319.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/send-meeting";
     private Button createButton;
     private Context mContext;
     private Date startDate;
@@ -39,13 +40,12 @@ public class CreateMeetingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mContext = getApplicationContext();
-                /*Meeting newMeeting = prepareNewMeeting(mContext);
+                Meeting newMeeting = prepareNewMeeting(mContext);
 
                 if (newMeeting != null) {
                     String newMeetingJSON = meetingToJSON(newMeeting);
-                    sendMeetingToServer(newMeetingJSON);
-                }*/
-                sendMeetingToServer("");
+                    sendMeetingToServer(mContext, newMeetingJSON);
+                }
             }
         });
 
@@ -103,7 +103,7 @@ public class CreateMeetingActivity extends AppCompatActivity {
     }
 
     private Meeting prepareNewMeeting(Context context) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String userFio = sharedPreferences.getString("pref_fio", "");
         String userPost = sharedPreferences.getString("pref_post", "");
         if (!userFio.equals("") && !userPost.equals("")) {
@@ -117,10 +117,10 @@ public class CreateMeetingActivity extends AppCompatActivity {
             if (startDate.before(endDate)) {
                 return new Meeting(meetingName, meetingDescription, startDate, endDate, participants, meetingPriority);
             } else {
-                Toast.makeText(mContext, R.string.meeting_startdate_should_be_before, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.meeting_startdate_should_be_before, Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(mContext, R.string.meeting_fill_userdata, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.meeting_fill_userdata, Toast.LENGTH_LONG).show();
         }
 
         return null;
@@ -134,7 +134,17 @@ public class CreateMeetingActivity extends AppCompatActivity {
         return  meetingJSON;
     }
 
-    private void sendMeetingToServer(String meetingJSON) {
-        new PutTask(mContext).execute(meetingJSON);
+    private void sendMeetingToServer(Context context, String meetingJSON) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String login = sharedPreferences.getString("pref_login", "");
+        String password = sharedPreferences.getString("pref_password", "");
+
+        if (!login.equals("") && !password.equals("")) {
+
+            new PutTask(mContext).execute(URL, login, password, meetingJSON);
+        }
+        else {
+            Toast.makeText(context, R.string.meeting_fill_serverdata, Toast.LENGTH_LONG).show();
+        }
     }
 }

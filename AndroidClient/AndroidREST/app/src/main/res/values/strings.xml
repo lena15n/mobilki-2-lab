@@ -35,6 +35,7 @@
     <string name="meeting_textview_start_date">(Tap to choose start date)</string>
     <string name="meeting_textview_end_date">(Tap to choose end date)</string>
     <string name="meeting_fill_userdata">Fill your name and post in settings first</string>
+    <string name="meeting_fill_serverdata">Fill login and password for server in settings first</string>
     <string name="meeting_startdate_should_be_before">Start date should be before end date of the meeting</string>
     <string name="meeting_result_ok">Meeting has been added successfully</string>
     <string name="meeting_result_not_ok">Some problems, try again</string>
