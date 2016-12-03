@@ -39,12 +39,13 @@ public class CreateMeetingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mContext = getApplicationContext();
-                Meeting newMeeting = prepareNewMeeting(mContext);
+                /*Meeting newMeeting = prepareNewMeeting(mContext);
 
                 if (newMeeting != null) {
                     String newMeetingJSON = meetingToJSON(newMeeting);
                     sendMeetingToServer(newMeetingJSON);
-                }
+                }*/
+                sendMeetingToServer("");
             }
         });
 

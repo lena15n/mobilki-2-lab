@@ -32,6 +32,7 @@ public class MyMainService {
         return meetings;
     }
 
+    @RolesAllowed("ADMIN")
     @PUT
     @Path("/send-meeting")
     @Consumes("application/json")

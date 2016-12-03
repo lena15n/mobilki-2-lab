@@ -1,0 +1,8 @@
+PUT /sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/send-meeting HTTP/1.1
+Host: 89f39319.ngrok.io
+Content-Type: application/json
+Authorization: Basic dXNlcjphZG1pbg==
+Cache-Control: no-cache
+Postman-Token: eb573c36-4bc1-82cc-051b-4ff65c632a25
+
+{"description": "gbhjk ","endDate":"Dec 10, 2016 00:00:34","name":"gfdghfhf","participants":["иии, апии"],"priority":"Plan","startDate":"Dec 3, 2016 00:00:36"}
