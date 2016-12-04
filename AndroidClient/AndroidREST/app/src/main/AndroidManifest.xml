@@ -28,6 +28,8 @@
             android:label="@string/title_activity_open_meetings"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".ShowMeetingActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -11,11 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.lena.androidrest.dataobjects.Meeting;
 import com.lena.androidrest.net.GetTask;
 
@@ -38,8 +40,6 @@ public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.M
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), FindMeetingActivity.class);
                 startActivity(intent);
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
             }
         });
 
@@ -73,7 +73,8 @@ public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.M
     private void openMeetings(final ArrayList<Meeting> meetings) {
         ListView meetingsListView = (ListView) findViewById(R.id.all_meetings_listview);
         if (meetingsListView != null) {
-            ArrayAdapter<Meeting> arrayAdapter = new ArrayAdapter<Meeting>(this, android.R.layout.simple_list_item_2, android.R.id.text1, meetings) {
+            final ArrayAdapter<Meeting> arrayAdapter = new ArrayAdapter<Meeting>(this,
+                    android.R.layout.simple_list_item_2, android.R.id.text1, meetings) {
                 @NonNull
                 @Override
                 public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -87,16 +88,20 @@ public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.M
                 }
             };
 
-            final String[] catNames = new String[] {
-                    "Рыжик", "Барсик", "Мурзик", "Мурка", "Васька",
-                    "Томасина", "Кристина", "Пушок", "Дымка", "Кузя",
-                    "Китти", "Масяня", "Симба"
-            };
-
-            ArrayAdapter<String> ad = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, android.R.id.text1, catNames);
             meetingsListView.setAdapter(arrayAdapter);
+
+            meetingsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
+                    Meeting currentMeeting = arrayAdapter.getItem(position);
+
+                    Context context = getApplicationContext();
+                    Intent intent = new Intent(context, ShowMeetingActivity.class);
+                    Gson gson = new Gson();
+                    intent.putExtra(context.getString(R.string.meeting), gson.toJson(currentMeeting));
+                    startActivity(intent);
+                }
+            });
         }
     }
-
-
 }
