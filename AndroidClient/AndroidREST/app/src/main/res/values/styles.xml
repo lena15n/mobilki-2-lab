@@ -10,7 +10,7 @@
     </style>
 
     <style name="Font" parent="@android:style/TextAppearance.Small">
-       <!-- <item name="android:layout_width">match_parent</item>
+        <!-- <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColorHint">@color/colorText</item>
         &lt;!&ndash;<item name="android:typeface">monospace</item>&ndash;&gt;
@@ -20,5 +20,14 @@
     <style name="FontHeader" parent="@android:style/TextAppearance.Small">
         <item name="android:textSize">20sp</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 </resources>

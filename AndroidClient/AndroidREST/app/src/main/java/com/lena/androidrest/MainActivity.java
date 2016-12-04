@@ -26,6 +26,28 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        Button openMeetingsButton = (Button) findViewById(R.id.open_meetings_button);
+        if (openMeetingsButton != null) {
+            openMeetingsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), OpenMeetingsActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        Button findMeetingButton = (Button) findViewById(R.id.find_meeting_button);
+        if (findMeetingButton != null) {
+            findMeetingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), FindMeetingActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
 
     }
 

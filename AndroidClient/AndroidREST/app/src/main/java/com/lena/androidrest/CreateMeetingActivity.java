@@ -140,7 +140,6 @@ public class CreateMeetingActivity extends AppCompatActivity {
         String password = sharedPreferences.getString("pref_password", "");
 
         if (!login.equals("") && !password.equals("")) {
-
             new PutTask(mContext).execute(URL, login, password, meetingJSON);
         }
         else {
