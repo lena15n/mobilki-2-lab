@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.util.Base64;
 import android.widget.Toast;
 
+import com.lena.androidrest.R;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -15,7 +17,7 @@ public class PutTask extends AsyncTask<String, Void, String> {
     private Context mContext;
     private String fullResponseMessage;
 
-    public PutTask (Context context){
+    public PutTask(Context context) {
         mContext = context;
     }
 
@@ -38,7 +40,7 @@ public class PutTask extends AsyncTask<String, Void, String> {
             httpConnection = (HttpURLConnection) url.openConnection();
             httpConnection.setDoOutput(true);
             httpConnection.setRequestMethod("PUT");
-            httpConnection.setRequestProperty ("Authorization", basicAuth);
+            httpConnection.setRequestProperty("Authorization", basicAuth);
             httpConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             httpConnection.setUseCaches(false);
 
@@ -64,19 +66,12 @@ public class PutTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String responseMessage) {
-        /*if (fullResponseMessage != null) {
-            if (fullResponseMessage.equals("200")) {
-                Toast.makeText(mContext, R.string.meeting_result_ok, Toast.LENGTH_SHORT).show();
-            } else if (fullResponseMessage.equals("500")) {
-                Toast.makeText(mContext, R.string.meeting_result_not_ok, Toast.LENGTH_SHORT).show();
-            }
-
-            Toast.makeText(mContext, fullResponseMessage, Toast.LENGTH_SHORT).show();
-        }
-        else {
+        if (fullResponseMessage.equals("200: OK")) {
+            Toast.makeText(mContext, R.string.meeting_result_ok, Toast.LENGTH_SHORT).show();
+        } else {
             Toast.makeText(mContext, R.string.meeting_result_not_ok, Toast.LENGTH_SHORT).show();
-        }*/
+        }
 
-        Toast.makeText(mContext, responseMessage, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext, responseMessage, Toast.LENGTH_SHORT).show();
     }
 }
