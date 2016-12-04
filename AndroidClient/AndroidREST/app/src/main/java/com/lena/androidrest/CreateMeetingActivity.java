@@ -24,7 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class CreateMeetingActivity extends AppCompatActivity {
-    private static final String URL = "http://89f39319.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/send-meeting";
+    private static final String URL = "http://c10f0db6.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/send-meeting";
     private Button createButton;
     private Context mContext;
     private Date startDate;

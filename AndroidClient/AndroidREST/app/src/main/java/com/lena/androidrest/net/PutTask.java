@@ -6,10 +6,8 @@ import android.os.AsyncTask;
 import android.util.Base64;
 import android.widget.Toast;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -26,20 +24,10 @@ public class PutTask extends AsyncTask<String, Void, String> {
         String urlString = params[0];
         String login = params[1];
         String password = params[2];
-        String meetingJSON1 = params[3];
-        String meetingJSON = "";
-        byte ptext[] = new byte[0];
-        try {
-            ptext = meetingJSON1.getBytes();
-            meetingJSON = new String(ptext, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-      //  String f = Charset.forName("UTF-8").encode(meetingJSON);
+        String meetingJSON = params[3];
 
         URL url;
-        OutputStreamWriter outin;
+        OutputStreamWriter out;
         HttpURLConnection httpConnection = null;
         String basicAuthData = login + ":" + password;
         String basicAuth = "Basic " + Base64.encodeToString(basicAuthData.getBytes(), Base64.NO_WRAP);
@@ -51,11 +39,10 @@ public class PutTask extends AsyncTask<String, Void, String> {
             httpConnection.setDoOutput(true);
             httpConnection.setRequestMethod("PUT");
             httpConnection.setRequestProperty ("Authorization", basicAuth);
-            httpConnection.setRequestProperty("Content-Type", "application/json");
+            httpConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             httpConnection.setUseCaches(false);
 
-            //outin = new OutputStreamWriter(httpConnection.getOutputStream());
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(httpConnection.getOutputStream(), "UTF-8"));
+            out = new OutputStreamWriter(httpConnection.getOutputStream());
             out.write(meetingJSON);
             out.close();
 
