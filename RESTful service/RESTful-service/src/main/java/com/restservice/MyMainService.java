@@ -25,13 +25,14 @@ public class MyMainService {
 
     @RolesAllowed("ADMIN")
     @GET
-    @Produces("application/json")
+    @Produces("application/json;charset=UTF-8")
     public List<Meeting> getMeetings() {
         ArrayList<Meeting> meetings = meetingsManager.getMeetings();
 
         return meetings;
     }
 
+    @RolesAllowed("ADMIN")
     @PUT
     @Path("/send-meeting")
     @Consumes("application/json")
