@@ -27,6 +27,22 @@ public class MeetingsManager {
         }
     }
 
+    public ArrayList<Meeting> findMeeting(String name) {
+        ArrayList<Meeting> foundMeetings = new ArrayList<>();
+
+        for (Meeting meeting : meetings) {
+            if (meeting.getName().equals(name)) {
+                foundMeetings.add(meeting);
+            }
+        }
+
+        if (foundMeetings.size() > 0) {
+            return foundMeetings;
+        }
+
+        return null;
+    }
+
     public ArrayList<Meeting> getMeetings() {
         return meetings;
     }

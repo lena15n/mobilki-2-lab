@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String URL = "http://c0a908c4.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

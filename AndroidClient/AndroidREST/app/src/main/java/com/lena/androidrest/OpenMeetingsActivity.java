@@ -25,7 +25,6 @@ import com.lena.androidrest.net.GetTask;
 import java.util.ArrayList;
 
 public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.MyAsyncResponse {
-    private static final String URL = "http://c0a908c4.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/";
     private Context mContext;
 
     @Override
@@ -53,9 +52,16 @@ public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.M
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String login = sharedPreferences.getString("pref_login", "");
         String password = sharedPreferences.getString("pref_password", "");
+        Intent intent = getIntent();
+        String nameParam = intent.getStringExtra(FindMeetingActivity.URL_NAME_POSTFIX);
+        String url = MainActivity.URL;
 
         if (!login.equals("") && !password.equals("")) {
-            new GetTask(this).execute(URL, login, password);
+            if (nameParam != null) {
+                url = url + FindMeetingActivity.URL_NAME_POSTFIX + nameParam;
+            }
+
+            new GetTask(this).execute(url, login, password);
         } else {
             Toast.makeText(context, R.string.meeting_fill_serverdata, Toast.LENGTH_LONG).show();
         }
@@ -65,9 +71,8 @@ public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.M
     public void processFinish(ArrayList<Meeting> meetings) {
         if (meetings != null) {
             openMeetings(meetings);
-        }
-        else {
-            Toast.makeText(mContext, R.string.meeting_result_not_ok, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(mContext, R.string.meeting_result_empty, Toast.LENGTH_LONG).show();
         }
     }
 

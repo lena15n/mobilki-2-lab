@@ -9,8 +9,8 @@ import javax.inject.Singleton;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import javax.ws.rs.QueryParam;
 
 @Singleton
 @Path("/meetings")
@@ -33,6 +33,14 @@ public class MyMainService {
     }
 
     @RolesAllowed("ADMIN")
+    @GET
+    @Path("/name")
+    @Produces("application/json;charset=UTF-8")
+    public List<Meeting> findMeetings(@QueryParam("name") String name) {
+        return meetingsManager.findMeeting(name);
+    }
+
+    @RolesAllowed("ADMIN")
     @PUT
     @Path("/send-meeting")
     @Consumes("application/json;charset=UTF-8")
@@ -40,19 +48,7 @@ public class MyMainService {
         meetingsManager.addMeeting(jsonMeeting);
         ArrayList<Meeting> meetings = meetingsManager.getMeetings();
         String out = "Meeting '" + jsonMeeting.getName() + "' was added!\n";
+
         return Response.status(200).entity(out).build();
-    }
-
-    @PUT//!!!
-    @Path("/{name}")
-    public Response putMeeting(@PathParam("name") String name) {
-        //http://localhost:8080/sampel-glassfish-0.0.1-SNAPSHOT/crunchify/meetings/azaza
-        ArrayList<String> participants = new ArrayList<>();
-        participants.add("part1");
-        participants.add("part2");
-        meetingsManager.addMeeting(new Meeting(name, "desc", new Date(), new Date(), participants, Meeting.PLAN));
-
-        String output = "PUT: Jersey say : " + name + "\n meeting has created";
-        return Response.status(200).entity(output).build();
     }
 }

@@ -12,7 +12,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -32,7 +31,6 @@ public class GetTask extends AsyncTask<String, Void, ArrayList<Meeting>> {
         String password = params[2];
 
         URL url;
-        OutputStreamWriter out;
         HttpURLConnection httpConnection = null;
         String basicAuthData = login + ":" + password;
         String basicAuth = "Basic " + Base64.encodeToString(basicAuthData.getBytes(), Base64.NO_WRAP);
@@ -43,7 +41,6 @@ public class GetTask extends AsyncTask<String, Void, ArrayList<Meeting>> {
             httpConnection = (HttpURLConnection) url.openConnection();
             httpConnection.setRequestMethod("GET");
             httpConnection.setRequestProperty("Authorization", basicAuth);
-            httpConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             httpConnection.setUseCaches(false);
 
             int responseCode = httpConnection.getResponseCode();

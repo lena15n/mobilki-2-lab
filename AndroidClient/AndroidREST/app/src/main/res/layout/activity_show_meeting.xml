@@ -28,14 +28,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="@string/meeting"/>
+                android:text="@string/meeting"
+                android:paddingBottom="30dp"/>
 
             <RelativeLayout
                 android:id="@+id/layout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:paddingBottom="16dp">
+                android:layout_marginTop="40dp"
+                android:paddingBottom="16dp"
+                >
 
                 <TextView
                     android:id="@+id/show_key_name_textview"
@@ -53,7 +55,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:ems="13"
-                    android:layout_marginBottom="13dp"
+                    android:layout_marginBottom="20dp"
                     android:inputType="textPersonName"/>
 
             </RelativeLayout>
@@ -81,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginBottom="13dp"
+                    android:layout_marginBottom="20dp"
                     android:ems="13"/>
 
             </RelativeLayout>

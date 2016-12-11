@@ -1,6 +1,5 @@
 package com.lena.androidrest.net;
 
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Base64;
@@ -71,7 +70,5 @@ public class PutTask extends AsyncTask<String, Void, String> {
         } else {
             Toast.makeText(mContext, R.string.meeting_result_not_ok, Toast.LENGTH_SHORT).show();
         }
-
-        //Toast.makeText(mContext, responseMessage, Toast.LENGTH_SHORT).show();
     }
 }

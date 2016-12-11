@@ -11,4 +11,47 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.lena.androidrest.FindMeetingActivity">
 
+    <TextView
+        android:id="@+id/find_header_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/find_header"
+        style="@style/FontHeader"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/find_layout"
+        android:layout_marginTop="60dp">
+
+        <TextView
+            android:id="@+id/find_label_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/find_label"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"/>
+
+        <EditText
+            android:id="@+id/find_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/find_label_textView"
+            android:inputType="textPersonName"
+            android:maxLength="50"
+            android:hint="@string/find_some_name"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/find_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/find_button_text"
+        android:layout_below="@+id/find_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"/>
+
 </RelativeLayout>
