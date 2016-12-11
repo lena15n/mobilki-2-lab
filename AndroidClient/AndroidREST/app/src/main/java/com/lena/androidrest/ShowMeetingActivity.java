@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.lena.androidrest.dataobjects.Meeting;
 
 import java.text.SimpleDateFormat;
@@ -46,7 +47,7 @@ public class ShowMeetingActivity extends AppCompatActivity {
     }
 
     private Meeting getMeetingFromJSON(String json) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("yyy-MM-dd'T'HH:mm:ss").create();
         return gson.fromJson(json, Meeting.class);
     }
 }

@@ -18,13 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.lena.androidrest.dataobjects.Meeting;
 import com.lena.androidrest.net.GetTask;
 
 import java.util.ArrayList;
 
 public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.MyAsyncResponse {
-    private static final String URL = "http://c10f0db6.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/";
+    private static final String URL = "http://c0a908c4.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/";
     private Context mContext;
 
     @Override
@@ -97,7 +98,7 @@ public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.M
 
                     Context context = getApplicationContext();
                     Intent intent = new Intent(context, ShowMeetingActivity.class);
-                    Gson gson = new Gson();
+                    Gson gson = new GsonBuilder().setDateFormat("yyy-MM-dd'T'HH:mm:ss").create();
                     intent.putExtra(context.getString(R.string.meeting), gson.toJson(currentMeeting));
                     startActivity(intent);
                 }

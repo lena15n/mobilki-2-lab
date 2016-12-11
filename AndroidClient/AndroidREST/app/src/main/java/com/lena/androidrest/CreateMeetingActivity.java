@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.lena.androidrest.dataobjects.Meeting;
 import com.lena.androidrest.net.PutTask;
 
@@ -24,7 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class CreateMeetingActivity extends AppCompatActivity {
-    private static final String URL = "http://c10f0db6.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/send-meeting";
+    private static final String URL = "http://c0a908c4.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/send-meeting";
     private Button createButton;
     private Context mContext;
     private Date startDate;
@@ -127,7 +128,7 @@ public class CreateMeetingActivity extends AppCompatActivity {
     }
 
     private String meetingToJSON(Meeting meeting) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("yyy-MM-dd'T'HH:mm:ss").create();
         String meetingJSON = gson.toJson(meeting);
 
         Log.i("GSON", gson.toJson(meetingJSON));
