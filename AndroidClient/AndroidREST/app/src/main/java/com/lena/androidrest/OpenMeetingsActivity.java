@@ -95,7 +95,6 @@ public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.M
             };
 
             meetingsListView.setAdapter(arrayAdapter);
-
             meetingsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
