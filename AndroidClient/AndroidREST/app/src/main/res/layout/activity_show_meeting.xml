@@ -199,6 +199,31 @@
 
             </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/layout7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="false"
+            android:layout_below="@+id/layout6"
+            android:paddingBottom="16dp"
+            android:layout_marginTop="30dp">
+
+
+            <Button
+                android:text="@string/meeting_participate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/participate_button"
+                android:layout_alignParentStart="true"/>
+
+            <Button
+                android:text="@string/meeting_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/cancel_button"/>
+        </RelativeLayout>
+
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>
