@@ -14,11 +14,11 @@ import javax.ws.rs.QueryParam;
 
 @Singleton
 @Path("/meetings")
-public class MyMainService {
+public class MeetingsService {
     MeetingsManager meetingsManager;
     ParticipantsManager participantsManager;
 
-    public MyMainService() {
+    public MeetingsService() {
         meetingsManager = new MeetingsManager();
         participantsManager = new ParticipantsManager();
     }
@@ -38,6 +38,17 @@ public class MyMainService {
     @Produces("application/json;charset=UTF-8")
     public List<Meeting> findMeetings(@QueryParam("name") String name) {
         return meetingsManager.findMeeting(name);
+    }
+
+    @RolesAllowed("ADMIN")
+    @POST
+    @Path("/participants")
+    @Consumes("application/json;charset=UTF-8")
+    public Response changeMeetingParticipants(Meeting jsonMeeting) {
+        meetingsManager.changeMeetingParticipants(jsonMeeting);
+        String out = "Meeting '" + jsonMeeting.getName() + "' was changed\n";
+
+        return Response.status(200).entity(out).build();
     }
 
     @RolesAllowed("ADMIN")

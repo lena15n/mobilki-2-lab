@@ -43,6 +43,15 @@ public class MeetingsManager {
         return null;
     }
 
+    public void changeMeetingParticipants(Meeting changedMeeting) {
+        for (Meeting meeting : meetings) {
+            if (meeting.getName().equals(changedMeeting.getName()) &&
+                    meeting.getDescription().equals(changedMeeting.getDescription())){
+                meeting.setParticipants(changedMeeting.getParticipants());
+            }
+        }
+    }
+
     public ArrayList<Meeting> getMeetings() {
         return meetings;
     }
@@ -53,8 +62,8 @@ public class MeetingsManager {
 
     private void init() {
         ArrayList<String> participants = new ArrayList<>();
-        participants.add(Participant.GALYA_SMITH);
-        participants.add(Participant.ARTEMII_LEBEDEV);
+        participants.add(Participant.GALYA_SMITH + ", doctor");
+        participants.add(Participant.ARTEMII_LEBEDEV + ", designer");
         addMeeting(new Meeting("Meeting", "This is new meeting!", new Date(), new Date(), participants, Meeting.CRITICAL));
     }
 }

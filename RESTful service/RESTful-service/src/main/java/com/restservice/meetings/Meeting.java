@@ -76,4 +76,16 @@ public class Meeting {
     public void setPriority(String priority) {
         this.priority = priority;
     }
+
+    public void addParticipant(String participant) {
+        if (!participants.contains(participant)) {
+            participants.add(participant);
+        }
+    }
+
+    public void removeParticipant(String participant) {
+        if (participants.contains(participant)) {
+            participants.remove(participant);
+        }
+    }
 }
