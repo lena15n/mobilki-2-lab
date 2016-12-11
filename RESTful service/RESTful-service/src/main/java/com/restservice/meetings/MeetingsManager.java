@@ -31,7 +31,7 @@ public class MeetingsManager {
         ArrayList<Meeting> foundMeetings = new ArrayList<>();
 
         for (Meeting meeting : meetings) {
-            if (meeting.getName().equals(name)) {
+            if (meeting.getName().contains(name)) {
                 foundMeetings.add(meeting);
             }
         }
