@@ -108,7 +108,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginBottom="13dp"/>
+                    android:layout_marginBottom="13dp"
+                    android:ems="13"/>
 
             </RelativeLayout>
 
@@ -135,7 +136,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginBottom="13dp"/>
+                    android:layout_marginBottom="13dp"
+                    android:ems="13"/>
 
             </RelativeLayout>
 
