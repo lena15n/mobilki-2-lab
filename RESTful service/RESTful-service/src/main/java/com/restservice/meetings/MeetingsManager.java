@@ -8,7 +8,7 @@ import java.util.Date;
 public class MeetingsManager {
     private static ArrayList<Meeting> meetings;
 
-    public MeetingsManager(){
+    public MeetingsManager() {
         meetings = new ArrayList<>();
         init();
     }
@@ -17,13 +17,21 @@ public class MeetingsManager {
         meetings = newMeetings;
     }
 
-    public void addMeeting(Meeting meeting){
+    public void addMeeting(Meeting meeting) {
         meetings.add(meeting);
     }
 
-    public void deleteMeeting(Meeting meeting){
-        if (meetings.size() != 0) {
-            meetings.remove(meeting);
+    public void deleteMeeting(String name, String description) {
+        int index = -1;
+
+        for (Meeting meeting : meetings) {
+            if (meeting.getName().equals(name) && meeting.getDescription().equals(description)){
+                index = meetings.indexOf(meeting);
+            }
+        }
+
+        if (index != -1) {
+            meetings.remove(index);
         }
     }
 
@@ -46,7 +54,7 @@ public class MeetingsManager {
     public void changeMeetingParticipants(Meeting changedMeeting) {
         for (Meeting meeting : meetings) {
             if (meeting.getName().equals(changedMeeting.getName()) &&
-                    meeting.getDescription().equals(changedMeeting.getDescription())){
+                    meeting.getDescription().equals(changedMeeting.getDescription())) {
                 meeting.setParticipants(changedMeeting.getParticipants());
             }
         }

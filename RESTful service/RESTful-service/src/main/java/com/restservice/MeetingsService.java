@@ -62,4 +62,16 @@ public class MeetingsService {
 
         return Response.status(200).entity(out).build();
     }
+
+    @RolesAllowed("ADMIN")
+    @DELETE
+    @Path("/delete")
+    public Response deleteMeeting(@QueryParam("name") String name,
+                                  @QueryParam("desc") String description) {
+        meetingsManager.deleteMeeting(name, description);
+        ArrayList<Meeting> meetings = meetingsManager.getMeetings();
+        String out = "Meeting '" + name + "' was canceled!\n";
+
+        return Response.status(200).entity(out).build();
+    }
 }
