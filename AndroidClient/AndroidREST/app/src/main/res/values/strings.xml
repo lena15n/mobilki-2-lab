@@ -43,7 +43,8 @@
     <string name="meeting_result_not_ok">Some problems, try again</string>
     <string name="meeting_result_not_ok_internet">Turn on internet connection</string>
 
-    <string name="show_result_ok">Participants has been changed successfully</string>
+    <string name="show_participants_result_ok">Participants has been changed successfully</string>
+    <string name="show_delete_result_ok">Meeting has been canceled</string>
     <string name="meeting_cancel">Cancel</string>
     <string name="meeting_participate">Participate</string>
     <string name="meeting_do_not_participate">Do not participate</string>

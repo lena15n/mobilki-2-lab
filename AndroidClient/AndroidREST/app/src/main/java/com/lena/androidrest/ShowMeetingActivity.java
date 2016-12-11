@@ -12,12 +12,16 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.lena.androidrest.dataobjects.Meeting;
+import com.lena.androidrest.net.DeleteTask;
 import com.lena.androidrest.net.PostTask;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 
 public class ShowMeetingActivity extends AppCompatActivity {
-    private static final String URL_POSTFIX = "participants";
+    private static final String URL_PARTICIPANTS_POSTFIX = "participants";
+    private static final String URL_DELETE_POSTFIX = "delete/?name=param1&desc=param2";
     private static Meeting meeting;
 
     @Override
@@ -43,7 +47,7 @@ public class ShowMeetingActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                cancelMeeting(meeting);
             }
         });
     }
@@ -122,7 +126,31 @@ public class ShowMeetingActivity extends AppCompatActivity {
         String meetingJSON = gson.toJson(meeting);
 
         if (!login.equals("") && !password.equals("")) {
-            new PostTask(this).execute(MainActivity.URL + URL_POSTFIX, login, password, meetingJSON);
+            new PostTask(this).execute(MainActivity.URL + URL_PARTICIPANTS_POSTFIX, login, password, meetingJSON);
+        } else {
+            Toast.makeText(this, R.string.meeting_fill_serverdata, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void cancelMeeting(Meeting meeting) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String login = sharedPreferences.getString("pref_login", "");
+        String password = sharedPreferences.getString("pref_password", "");
+        String name = null;
+        String desc = null;
+        try {
+            name = URLEncoder.encode(meeting.getName(), "UTF-8");
+            desc = URLEncoder.encode(meeting.getDescription(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String urlString = MainActivity.URL + URL_DELETE_POSTFIX;
+        urlString = urlString.replace("param1", name);
+        urlString = urlString.replace("param2", desc);
+
+        if (!login.equals("") && !password.equals("")) {
+            new DeleteTask(this).execute(urlString, login, password);
         } else {
             Toast.makeText(this, R.string.meeting_fill_serverdata, Toast.LENGTH_LONG).show();
         }
