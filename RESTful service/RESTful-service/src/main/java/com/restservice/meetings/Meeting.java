@@ -2,6 +2,7 @@ package com.restservice.meetings;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Meeting {
     public static String CRITICAL = "Critical";
@@ -87,5 +88,53 @@ public class Meeting {
         if (participants.contains(participant)) {
             participants.remove(participant);
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        } else if (obj instanceof Meeting){
+            Meeting meetingObj = (Meeting)obj;
+
+            if (meetingObj.getName().equals(getName()) &&
+                    meetingObj.getDescription().equals(getDescription()) &&
+                    meetingObj.getStartDate().equals(getStartDate()) &&
+                    meetingObj.getEndDate().equals(getEndDate()) &&
+                    meetingObj.getPriority().equals(getPriority()) &&
+                    meetingObj.getParticipants().size() == getParticipants().size()) {
+
+                for (String participant : meetingObj.getParticipants()) {
+                    if (!participants.contains(participant)){
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+        result = 31 * result + name.hashCode();
+        result = 31 * result + description.hashCode();
+        result = 31 * result + startDate.hashCode();
+        result = 31 * result + endDate.hashCode();
+        result = 31 * result + priority.hashCode();
+        result = 31 * result + participants.size();
+
+        // (mb it's bad, but I need take into account only content, but not its sequence)
+        int temp = 0;
+        for (String participant : participants) {
+            temp += participant.hashCode();
+        }
+
+        result = 31 * result + temp;
+
+        return result;
     }
 }
