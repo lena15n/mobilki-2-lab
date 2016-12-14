@@ -45,7 +45,6 @@ public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.M
 
         mContext = getApplicationContext();
         prepareRequestToServer(mContext);
-
     }
 
     private void prepareRequestToServer(Context context) {

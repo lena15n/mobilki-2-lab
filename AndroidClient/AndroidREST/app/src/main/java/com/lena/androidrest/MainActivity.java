@@ -9,12 +9,15 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String URL = "http://14234ea8.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/";
+    public static final String URL = "http://4de5c7b7.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/";
+    public static final String LOG_TAG = "Mine";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        startService(new Intent(this, MeetingsService.class));
 
         Button createMeetingButton = (Button) findViewById(R.id.create_meeting_button);
         if (createMeetingButton != null) {
@@ -48,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-
-
     }
 
     @Override
@@ -68,5 +69,12 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        //unbindService(serviceConnection);
     }
 }
