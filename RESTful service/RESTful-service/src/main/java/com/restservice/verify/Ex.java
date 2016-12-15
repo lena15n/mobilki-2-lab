@@ -2,6 +2,9 @@ package com.restservice.verify;
 
 import com.restservice.meetings.Meeting;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,5 +34,15 @@ public class Ex {
         eq = meeting1.equals(meeting2);
         hash1 = meeting1.hashCode();
         hash2 = meeting2.hashCode();
+
+
+        String str = date1.toString();
+        DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ss");
+        String str2 = dateFormat.format(date1);
+        try {
+            Date date = dateFormat.parse(str2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }
