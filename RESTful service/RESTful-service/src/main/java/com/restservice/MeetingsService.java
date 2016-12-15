@@ -34,7 +34,7 @@ public class MeetingsService {
 
     @RolesAllowed("ADMIN")
     @GET
-    @Path("/name")
+    @Path("/search")
     @Produces("application/json;charset=UTF-8")
     public List<Meeting> findMeetings(@QueryParam("words") String words,
                                       @QueryParam("date") String date) {
