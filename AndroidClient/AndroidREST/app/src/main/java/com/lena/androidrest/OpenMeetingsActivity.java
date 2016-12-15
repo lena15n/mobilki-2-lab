@@ -52,12 +52,12 @@ public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.M
         String login = sharedPreferences.getString("pref_login", "");
         String password = sharedPreferences.getString("pref_password", "");
         Intent intent = getIntent();
-        String nameParam = intent.getStringExtra(FindMeetingActivity.URL_NAME_POSTFIX);
+        String findMeetingsUrl = intent.getStringExtra(FindMeetingActivity.URL);
         String url = MainActivity.URL;
 
         if (!login.equals("") && !password.equals("")) {
-            if (nameParam != null) {
-                url = url + FindMeetingActivity.URL_NAME_POSTFIX + nameParam;
+            if (findMeetingsUrl != null) {
+                url = findMeetingsUrl;
             }
 
             new GetTask(this).execute(url, login, password);

@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String URL = "http://4de5c7b7.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/";
+    public static final String URL = "http://80ec580b.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/";
     public static final String LOG_TAG = "Mine";
 
     @Override
