@@ -1,8 +1,10 @@
 package com.lena.androidrest;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -40,6 +42,14 @@ public class ShowMeetingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setNewParticipantOfMeeting(participateButton);
+            }
+        });
+
+        Button toGoogleCalendarButton = (Button) findViewById(R.id.to_google_button);
+        toGoogleCalendarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMeetingToGoogleCalendar(meeting);
             }
         });
 
@@ -130,6 +140,17 @@ public class ShowMeetingActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, R.string.meeting_fill_serverdata, Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void sendMeetingToGoogleCalendar(Meeting meeting) {
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, meeting.getStartDate().getTime())
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, meeting.getEndDate().getTime())
+                .putExtra(CalendarContract.Events.TITLE, meeting.getName())
+                .putExtra(CalendarContract.Events.DESCRIPTION, meeting.getDescription())
+                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+        startActivity(intent);
     }
 
     private void cancelMeeting(Meeting meeting) {
