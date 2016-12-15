@@ -38,7 +38,7 @@ public class MeetingsManager {
         }
     }
 
-    public ArrayList<Meeting> findMeeting(String name, String strDate) {
+    public ArrayList<Meeting> findMeeting(String words, String strDate) {
         ArrayList<Meeting> foundMeetings = new ArrayList<>();
 
         if (strDate != null) {
@@ -55,8 +55,8 @@ public class MeetingsManager {
                 }
 
                 if (date != null && date.after(startDate) && date.before(endDate)) {
-                    if (name != null) {
-                        if (meeting.getName().contains(name) || meeting.getDescription().contains(name)) {
+                    if (words != null) {
+                        if (meeting.getName().contains(words) || meeting.getDescription().contains(words)) {
                             foundMeetings.add(meeting);
                         }
                     } else {
@@ -66,7 +66,7 @@ public class MeetingsManager {
             }
         } else {
             for (Meeting meeting : meetings) {
-                if (meeting.getName().contains(name) || meeting.getDescription().contains(name)) {
+                if (meeting.getName().contains(words) || meeting.getDescription().contains(words)) {
                     foundMeetings.add(meeting);
                 }
             }

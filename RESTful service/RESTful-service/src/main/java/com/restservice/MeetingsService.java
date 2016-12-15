@@ -36,9 +36,9 @@ public class MeetingsService {
     @GET
     @Path("/name")
     @Produces("application/json;charset=UTF-8")
-    public List<Meeting> findMeetings(@QueryParam("name") String name,
+    public List<Meeting> findMeetings(@QueryParam("words") String words,
                                       @QueryParam("date") String date) {
-        return meetingsManager.findMeeting(name, date);
+        return meetingsManager.findMeeting(words, date);
     }
 
     @RolesAllowed("ADMIN")
