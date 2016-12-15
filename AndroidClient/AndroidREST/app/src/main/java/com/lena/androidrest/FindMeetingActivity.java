@@ -19,8 +19,8 @@ import java.util.Date;
 
 public class FindMeetingActivity extends AppCompatActivity {
     public static final String URL = "FindMeetingActivityURL";
-    private static final String URL_POSTFIX = "name/?";
-    private static final String URL_WORDS_POSTFIX = "name=";
+    private static final String URL_POSTFIX = "search/?";
+    private static final String URL_WORDS_POSTFIX = "words=";
     private static final String URL_DATE_POSTFIX = "date=";
     private Date date;
 
