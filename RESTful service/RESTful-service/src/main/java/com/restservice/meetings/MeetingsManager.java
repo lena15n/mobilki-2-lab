@@ -2,6 +2,9 @@ package com.restservice.meetings;
 
 import com.restservice.participants.Participant;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -25,7 +28,7 @@ public class MeetingsManager {
         int index = -1;
 
         for (Meeting meeting : meetings) {
-            if (meeting.getName().equals(name) && meeting.getDescription().equals(description)){
+            if (meeting.getName().equals(name) && meeting.getDescription().equals(description)) {
                 index = meetings.indexOf(meeting);
             }
         }
@@ -35,14 +38,40 @@ public class MeetingsManager {
         }
     }
 
-    public ArrayList<Meeting> findMeeting(String name) {
+    public ArrayList<Meeting> findMeeting(String words, String strDate) {
         ArrayList<Meeting> foundMeetings = new ArrayList<>();
 
-        for (Meeting meeting : meetings) {
-            if (meeting.getName().contains(name)) {
-                foundMeetings.add(meeting);
+        if (strDate != null) {
+            DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ss");
+
+            for (Meeting meeting : meetings) {
+                Date startDate = meeting.getStartDate();
+                Date endDate = meeting.getEndDate();
+                Date date = null;
+                try {
+                    date = dateFormat.parse(strDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                if (date != null && date.after(startDate) && date.before(endDate)) {
+                    if (words != null) {
+                        if (meeting.getName().contains(words) || meeting.getDescription().contains(words)) {
+                            foundMeetings.add(meeting);
+                        }
+                    } else {
+                        foundMeetings.add(meeting);
+                    }
+                }
+            }
+        } else {
+            for (Meeting meeting : meetings) {
+                if (meeting.getName().contains(words) || meeting.getDescription().contains(words)) {
+                    foundMeetings.add(meeting);
+                }
             }
         }
+
 
         if (foundMeetings.size() > 0) {
             return foundMeetings;
