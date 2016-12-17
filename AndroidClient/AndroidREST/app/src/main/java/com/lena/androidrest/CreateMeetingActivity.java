@@ -2,6 +2,7 @@ package com.lena.androidrest;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class CreateMeetingActivity extends AppCompatActivity {
+public class CreateMeetingActivity extends AppCompatActivity {//implements GetTask.MyAsyncResponse {
     private static final String URL = MainActivity.URL + "send-meeting";
     private Button createButton;
     private Context mContext;
@@ -81,8 +82,6 @@ public class CreateMeetingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-
     }
 
     public void onStartDataSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -142,9 +141,15 @@ public class CreateMeetingActivity extends AppCompatActivity {
 
         if (!login.equals("") && !password.equals("")) {
             new PutTask(mContext).execute(URL, login, password, meetingJSON);
+
+            Intent intent = new Intent(this, OpenMeetingsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
         else {
             Toast.makeText(context, R.string.meeting_fill_serverdata, Toast.LENGTH_LONG).show();
         }
     }
+
+
 }

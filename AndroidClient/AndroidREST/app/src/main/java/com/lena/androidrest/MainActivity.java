@@ -3,13 +3,14 @@ package com.lena.androidrest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String URL = "http://80ec580b.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/";
+    public static final String URL = "http://ea6b671c.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/";
     public static final String LOG_TAG = "Mine";
 
     @Override
@@ -17,7 +18,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startService(new Intent(this, MeetingsService.class));
+        Intent intent = new Intent(this, MeetingsService.class);
+        intent.putExtra("app", "on");
+        Log.d(MainActivity.LOG_TAG, "onCreate main");
+        stopService(intent);
+
 
         Button createMeetingButton = (Button) findViewById(R.id.create_meeting_button);
         if (createMeetingButton != null) {
@@ -72,9 +77,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        //unbindService(serviceConnection);
+        Intent intent = new Intent(this, MeetingsService.class);
+        intent.putExtra("app", "off");
+        Log.d(MainActivity.LOG_TAG, "onDestroy main");
+        startService(intent);
     }
 }

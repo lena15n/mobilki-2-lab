@@ -172,6 +172,9 @@ public class ShowMeetingActivity extends AppCompatActivity {
 
         if (!login.equals("") && !password.equals("")) {
             new DeleteTask(this).execute(urlString, login, password);
+            Intent intent = new Intent(this, OpenMeetingsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         } else {
             Toast.makeText(this, R.string.meeting_fill_serverdata, Toast.LENGTH_LONG).show();
         }

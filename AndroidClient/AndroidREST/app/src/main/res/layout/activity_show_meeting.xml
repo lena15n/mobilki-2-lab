@@ -205,7 +205,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="false"
             android:layout_below="@+id/layout6"
-            android:paddingBottom="16dp"
             android:layout_marginTop="30dp">
 
 
@@ -219,17 +218,19 @@
             <Button
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:layout_marginStart="10dp"
                 android:text="@string/meeting_to_google"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
+                android:layout_toEndOf="@+id/participate_button"
                 android:id="@+id/to_google_button"/>
 
             <Button
                 android:text="@string/meeting_cancel"
+                android:layout_marginStart="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@+id/to_google_button"
                 android:id="@+id/cancel_button"/>
         </RelativeLayout>
 
