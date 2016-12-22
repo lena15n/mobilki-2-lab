@@ -19,24 +19,23 @@ public class MainActivity extends AppCompatActivity {
     public static final String LOG_TAG = "Mine";
     public static final String DATE_FORMAT = "yyy-MM-dd'T'HH:mm:ss";
     public static final String BEAUTY_DATE_FORMAT = "dd.MM.yyyy    HH:mm";
-    private int requestCode = 11;
+    public static final int REQUEST_CODE = 11;
+    public static final int MILLIS_TO_SLEEP = 5000;
+    private int createAlarm = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, MeetingsService.class);
-        PendingIntent pintent = PendingIntent.getService(this, requestCode, intent, 0);
-        AlarmManager alarm_stop = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        alarm_stop.cancel(pintent);
-        Log.d(MainActivity.LOG_TAG, "delete alarm");
+        cancelAlarm(getApplicationContext());
 
         Button createMeetingButton = (Button) findViewById(R.id.create_meeting_button);
         if (createMeetingButton != null) {
             createMeetingButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    createAlarm = 0;
                     Intent intent = new Intent(getApplicationContext(), CreateMeetingActivity.class);
                     startActivity(intent);
                 }
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
             openMeetingsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    createAlarm = 0;
                     Intent intent = new Intent(getApplicationContext(), OpenMeetingsActivity.class);
                     startActivity(intent);
                 }
@@ -59,11 +59,19 @@ public class MainActivity extends AppCompatActivity {
             findMeetingButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    createAlarm = 0;
                     Intent intent = new Intent(getApplicationContext(), FindMeetingActivity.class);
                     startActivity(intent);
                 }
             });
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        cancelAlarm(getApplicationContext());
     }
 
     @Override
@@ -76,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings: {
+                createAlarm = 0;
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
             }
@@ -84,27 +93,45 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public static void cancelAlarm(Context context) {
+        Intent intent = new Intent(context, MeetingsService.class);
+        PendingIntent pintent = PendingIntent.getService(context, REQUEST_CODE, intent, 0);
+        AlarmManager alarm_stop = (AlarmManager)context.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        alarm_stop.cancel(pintent);
+        Log.d(MainActivity.LOG_TAG, "delete alarm");
+    }
+
+    public static void createAlarm(Context context) {
+        Calendar calendar = Calendar.getInstance();
+        Intent intent = new Intent(context, MeetingsService.class);
+        PendingIntent pIntent = PendingIntent.getService(context, REQUEST_CODE, intent, 0);
+        AlarmManager alarm = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), MILLIS_TO_SLEEP, pIntent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        createAlarm = 1;
+        super.onBackPressed();
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
 
-        Calendar calendar = Calendar.getInstance();
-        Intent intent = new Intent(this, MeetingsService.class);
-        PendingIntent pintent = PendingIntent.getService(this, requestCode, intent, 0);
-        AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 5 * 1000, pintent);
-        Log.d(MainActivity.LOG_TAG, "create alarm on stop");
+        if (createAlarm == 1) {
+            createAlarm(getApplicationContext());
+            Log.d(MainActivity.LOG_TAG, "create alarm on stop");
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        Calendar calendar = Calendar.getInstance();
-        Intent intent = new Intent(this, MeetingsService.class);
-        PendingIntent pintent = PendingIntent.getService(this, requestCode, intent, 0);
-        AlarmManager alarm = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 5 * 1000, pintent);
-        Log.d(MainActivity.LOG_TAG, "create alarm");
+        if (createAlarm == 1) {
+            createAlarm(getApplicationContext());
+            Log.d(MainActivity.LOG_TAG, "create alarm");
+        }
     }
 }

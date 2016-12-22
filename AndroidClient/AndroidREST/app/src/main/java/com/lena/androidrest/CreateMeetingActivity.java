@@ -32,6 +32,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.lena.androidrest.MainActivity.cancelAlarm;
+import static com.lena.androidrest.MainActivity.createAlarm;
+
 public class CreateMeetingActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener,
         DatePickerDialog.OnDateSetListener {//implements GetTask.MyAsyncResponse {
     private static final String URL = MainActivity.URL + "send-meeting";
@@ -45,11 +48,14 @@ public class CreateMeetingActivity extends AppCompatActivity implements TimePick
     private int endDayOfMonth;
     private Date startDate;
     private Date endDate;
+    private int createAlarm = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_meeting);
+
+        cancelAlarm(getApplicationContext());
 
         createButton = (Button) findViewById(R.id.meeting_create_button);
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +102,8 @@ public class CreateMeetingActivity extends AppCompatActivity implements TimePick
     @Override
     protected void onResume() {
         super.onResume();
+
+        cancelAlarm(getApplicationContext());
     }
 
     @Override
@@ -108,8 +116,7 @@ public class CreateMeetingActivity extends AppCompatActivity implements TimePick
             startMonthOfYear = monthOfYear;
             startDayOfMonth = dayOfMonth;
             timePickerFragment.show(fragmentManager, getString(R.string.meeting_enter_start_date));
-        }
-        else if (fragmentManager.findFragmentByTag(getString(R.string.meeting_enter_end_date)) != null) {
+        } else if (fragmentManager.findFragmentByTag(getString(R.string.meeting_enter_end_date)) != null) {
             endYear = year;
             endMonthOfYear = monthOfYear;
             endDayOfMonth = dayOfMonth;
@@ -134,8 +141,7 @@ public class CreateMeetingActivity extends AppCompatActivity implements TimePick
             String startDateString = dateFormat.format(startDate);
             TextView startDateTextView = (TextView) findViewById(R.id.meeting_start_date_textview);
             startDateTextView.setText(startDateString);
-        }
-        else if (getFragmentManager().findFragmentByTag(getString(R.string.meeting_enter_end_date)) != null) {
+        } else if (getFragmentManager().findFragmentByTag(getString(R.string.meeting_enter_end_date)) != null) {
             calendar.set(endYear, endMonthOfYear, endDayOfMonth, hourOfDay, minute);
             endDate = calendar.getTime();
             String endDateString = dateFormat.format(endDate);
@@ -173,7 +179,7 @@ public class CreateMeetingActivity extends AppCompatActivity implements TimePick
         String meetingJSON = gson.toJson(meeting);
 
         Log.i("GSON", gson.toJson(meetingJSON));
-        return  meetingJSON;
+        return meetingJSON;
     }
 
     private void sendMeetingToServer(Context context, String meetingJSON) {
@@ -184,12 +190,38 @@ public class CreateMeetingActivity extends AppCompatActivity implements TimePick
         if (!login.equals("") && !password.equals("")) {
             new PutTask(mContext).execute(URL, login, password, meetingJSON);
 
+            createAlarm = 0;
             Intent intent = new Intent(this, OpenMeetingsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }
-        else {
+        } else {
             Toast.makeText(context, R.string.meeting_fill_serverdata, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        createAlarm = 0;
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (createAlarm == 1) {
+            createAlarm(getApplicationContext());
+            Log.d(MainActivity.LOG_TAG, "create alarm on stop");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (createAlarm == 1) {
+            createAlarm(getApplicationContext());
+            Log.d(MainActivity.LOG_TAG, "create alarm");
         }
     }
 }

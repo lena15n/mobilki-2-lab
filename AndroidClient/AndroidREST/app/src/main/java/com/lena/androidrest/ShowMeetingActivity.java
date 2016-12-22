@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,10 +22,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 
+import static com.lena.androidrest.MainActivity.cancelAlarm;
+import static com.lena.androidrest.MainActivity.createAlarm;
+
 public class ShowMeetingActivity extends AppCompatActivity {
     private static final String URL_PARTICIPANTS_POSTFIX = "participants";
     private static final String URL_DELETE_POSTFIX = "delete/?name=param1&desc=param2";
     private static Meeting meeting;
+    private int createAlarm = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,13 @@ public class ShowMeetingActivity extends AppCompatActivity {
                 cancelMeeting(meeting);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        cancelAlarm(getApplicationContext());
     }
 
     private Meeting getMeetingFromJSON(String json) {
@@ -143,6 +155,7 @@ public class ShowMeetingActivity extends AppCompatActivity {
     }
 
     private void sendMeetingToGoogleCalendar(Meeting meeting) {
+        createAlarm = 1;
         Intent intent = new Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, meeting.getStartDate().getTime())
@@ -172,11 +185,38 @@ public class ShowMeetingActivity extends AppCompatActivity {
 
         if (!login.equals("") && !password.equals("")) {
             new DeleteTask(this).execute(urlString, login, password);
+            createAlarm = 0;
             Intent intent = new Intent(this, OpenMeetingsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
             Toast.makeText(this, R.string.meeting_fill_serverdata, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        createAlarm = 0;
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (createAlarm == 1) {
+            createAlarm(getApplicationContext());
+            Log.d(MainActivity.LOG_TAG, "create alarm on stop");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (createAlarm == 1) {
+            createAlarm(getApplicationContext());
+            Log.d(MainActivity.LOG_TAG, "create alarm");
         }
     }
 }

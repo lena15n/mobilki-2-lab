@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -24,13 +25,20 @@ import com.lena.androidrest.net.GetTask;
 
 import java.util.ArrayList;
 
+import static com.lena.androidrest.MainActivity.cancelAlarm;
+import static com.lena.androidrest.MainActivity.createAlarm;
+
 public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.MyAsyncResponse {
     private Context mContext;
+    private int createAlarm = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_meetings);
+
+        cancelAlarm(getApplicationContext());
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -38,6 +46,7 @@ public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.M
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                createAlarm = 0;
                 Intent intent = new Intent(getApplicationContext(), FindMeetingActivity.class);
                 startActivity(intent);
             }
@@ -45,6 +54,13 @@ public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.M
 
         mContext = getApplicationContext();
         prepareRequestToServer(mContext);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        cancelAlarm(getApplicationContext());
     }
 
     private void prepareRequestToServer(Context context) {
@@ -99,6 +115,7 @@ public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.M
                 public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
                     Meeting currentMeeting = arrayAdapter.getItem(position);
 
+                    createAlarm = 0;
                     Context context = getApplicationContext();
                     Intent intent = new Intent(context, ShowMeetingActivity.class);
                     Gson gson = new GsonBuilder().setDateFormat(MainActivity.DATE_FORMAT).create();
@@ -106,6 +123,32 @@ public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.M
                     startActivity(intent);
                 }
             });
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        createAlarm = 0;
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (createAlarm == 1) {
+            createAlarm(getApplicationContext());
+            Log.d(MainActivity.LOG_TAG, "create alarm on stop");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (createAlarm == 1) {
+            createAlarm(getApplicationContext());
+            Log.d(MainActivity.LOG_TAG, "create alarm");
         }
     }
 }

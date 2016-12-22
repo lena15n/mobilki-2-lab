@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -23,6 +24,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.lena.androidrest.MainActivity.cancelAlarm;
+import static com.lena.androidrest.MainActivity.createAlarm;
+
 public class FindMeetingActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener,
         DatePickerDialog.OnDateSetListener {
     public static final String URL = "FindMeetingActivityURL";
@@ -33,11 +37,14 @@ public class FindMeetingActivity extends AppCompatActivity implements TimePicker
     private int mYear;
     private int mMonthOfYear;
     private int mDayOfMonth;
+    private int createAlarm = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_meeting);
+
+        cancelAlarm(getApplicationContext());
 
         TextView startDateTextView = (TextView) findViewById(R.id.find_set_date_label_textView);
         startDateTextView.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +69,13 @@ public class FindMeetingActivity extends AppCompatActivity implements TimePicker
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        cancelAlarm(getApplicationContext());
+    }
+
     private void sendFindMeetingRequest(String name, String strDate) {
         Intent intent = new Intent(this, OpenMeetingsActivity.class);
         StringBuilder stringBuilder = new StringBuilder();
@@ -82,6 +96,7 @@ public class FindMeetingActivity extends AppCompatActivity implements TimePicker
             stringBuilder.append(strDate);
         }
 
+        createAlarm = 0;
         intent.putExtra(URL, stringBuilder.toString());
         startActivity(intent);
     }
@@ -134,6 +149,32 @@ public class FindMeetingActivity extends AppCompatActivity implements TimePicker
             String startDateString = dateFormat.format(date);
             TextView startDateTextView = (TextView) findViewById(R.id.find_set_date_label_textView);
             startDateTextView.setText(startDateString);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        createAlarm = 0;
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (createAlarm == 1) {
+            createAlarm(getApplicationContext());
+            Log.d(MainActivity.LOG_TAG, "create alarm on stop");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (createAlarm == 1) {
+            createAlarm(getApplicationContext());
+            Log.d(MainActivity.LOG_TAG, "create alarm");
         }
     }
 }

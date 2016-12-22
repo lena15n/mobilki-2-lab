@@ -20,11 +20,9 @@ import java.util.ArrayList;
 
 public class MeetingsService extends IntentService implements GetTask.MyAsyncResponse {
     NotificationManager notificationManager;
-    private static final int MINUTES_TO_SLEEP = 10;
     private static final String serviceName = "MeetingsService";
     private static int id;
     private ArrayList<Meeting> meetings;
-    private boolean app = true;
 
 
     public MeetingsService() {
@@ -41,19 +39,6 @@ public class MeetingsService extends IntentService implements GetTask.MyAsyncRes
         id = 0;
     }
 
-   /* @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        super.onStartCommand(intent, flags, startId);
-        Log.d(MainActivity.LOG_TAG, "start command zzz");
-        return START_NOT_STICKY;//START_STICKY tells the OS to recreate the service after it has enough
-        // memory and call onStartCommand() again with a null intent
-
-        //START_REDELIVER_INTENT -  tells the OS to recreate
-        // the service AND redelivery the same intent to onStartCommand()
-
-        //START_NOT_STICKY - tells the OS to not bother recreating the service again
-    }
-*/
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(MainActivity.LOG_TAG, "onHandleIntent");
