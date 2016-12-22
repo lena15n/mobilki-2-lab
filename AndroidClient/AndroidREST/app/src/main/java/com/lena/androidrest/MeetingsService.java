@@ -13,17 +13,18 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lena.androidrest.dataobjects.Meeting;
 import com.lena.androidrest.net.GetTask;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MeetingsService extends IntentService implements GetTask.MyAsyncResponse {
     NotificationManager notificationManager;
     private static final String serviceName = "MeetingsService";
     private static int id;
-    private ArrayList<Meeting> meetings;
-
 
     public MeetingsService() {
         super(serviceName);
@@ -35,7 +36,6 @@ public class MeetingsService extends IntentService implements GetTask.MyAsyncRes
         super.onCreate();
 
         Log.d(MainActivity.LOG_TAG, "create zzz");
-        meetings = new ArrayList<>();
         id = 0;
     }
 
@@ -99,13 +99,29 @@ public class MeetingsService extends IntentService implements GetTask.MyAsyncRes
 
     @Override
     public void processFinish(ArrayList<Meeting> newMeetings) {
-        if (newMeetings != null) {
-            newMeetings.removeAll(meetings);//leave only new meetings, that don't exist in meetings
-            meetings.addAll(newMeetings);
+        SharedPreferences sharedPreferences = PreferenceManager.
+                getDefaultSharedPreferences(getApplicationContext());
+        Type collectionType = new TypeToken<ArrayList<String>>(){}.getType();
+        Gson gson = new Gson();
+        ArrayList<String> meetings = gson.fromJson(sharedPreferences.getString("meetings", "[]"), collectionType);
+        ArrayList<Meeting> indexes = new ArrayList<>();
 
+        if (newMeetings != null) {
             for (Meeting meeting : newMeetings) {
+                if (meetings.contains(meeting.getName())) {
+                    indexes.add(meeting);
+                }
+            }
+
+            newMeetings.removeAll(indexes);//leave only new meetings, that don't exist in meetings
+            for (Meeting meeting : newMeetings) {
+                meetings.add(meeting.getName());
                 prepareMyNotification(meeting);
             }
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("meetings", gson.toJson(meetings));
+            editor.apply();
         }
     }
 
