@@ -1,5 +1,8 @@
 package com.lena.androidrest;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +12,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity {
-    public static final String URL = "http://ea6b671c.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/";
+    public static final String URL = "http://a530004b.ngrok.io/sampel-glassfish-0.0.1-SNAPSHOT/rest/meetings/";
     public static final String LOG_TAG = "Mine";
+    public static final String DATE_FORMAT = "yyy-MM-dd'T'HH:mm:ss";
+    public static final String BEAUTY_DATE_FORMAT = "dd.MM.yyyy    HH:mm";
+    private int requestCode = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,10 +27,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Intent intent = new Intent(this, MeetingsService.class);
-        intent.putExtra("app", "on");
-        Log.d(MainActivity.LOG_TAG, "onCreate main");
-        stopService(intent);
-
+        PendingIntent pintent = PendingIntent.getService(this, requestCode, intent, 0);
+        AlarmManager alarm_stop = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        alarm_stop.cancel(pintent);
+        Log.d(MainActivity.LOG_TAG, "delete alarm");
 
         Button createMeetingButton = (Button) findViewById(R.id.create_meeting_button);
         if (createMeetingButton != null) {
@@ -77,17 +85,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
+
+        Calendar calendar = Calendar.getInstance();
+        Intent intent = new Intent(this, MeetingsService.class);
+        PendingIntent pintent = PendingIntent.getService(this, requestCode, intent, 0);
+        AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 5 * 1000, pintent);
+        Log.d(MainActivity.LOG_TAG, "create alarm on stop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
+        Calendar calendar = Calendar.getInstance();
         Intent intent = new Intent(this, MeetingsService.class);
-        intent.putExtra("app", "off");
-        Log.d(MainActivity.LOG_TAG, "onDestroy main");
-        startService(intent);
+        PendingIntent pintent = PendingIntent.getService(this, requestCode, intent, 0);
+        AlarmManager alarm = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 5 * 1000, pintent);
+        Log.d(MainActivity.LOG_TAG, "create alarm");
     }
 }

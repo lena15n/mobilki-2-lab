@@ -63,7 +63,7 @@ public class ShowMeetingActivity extends AppCompatActivity {
     }
 
     private Meeting getMeetingFromJSON(String json) {
-        Gson gson = new GsonBuilder().setDateFormat("yyy-MM-dd'T'HH:mm:ss").create();
+        Gson gson = new GsonBuilder().setDateFormat(MainActivity.DATE_FORMAT).create();
         return gson.fromJson(json, Meeting.class);
     }
 
@@ -75,7 +75,7 @@ public class ShowMeetingActivity extends AppCompatActivity {
         descTextView.setText(meeting.getDescription());
 
         TextView startTextView = (TextView) findViewById(R.id.show_value_start_date_textview);
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat format = new SimpleDateFormat(MainActivity.BEAUTY_DATE_FORMAT);
         startTextView.setText(format.format(meeting.getStartDate()));
 
         TextView endTextView = (TextView) findViewById(R.id.show_value_end_date_textview);
@@ -132,7 +132,7 @@ public class ShowMeetingActivity extends AppCompatActivity {
         String login = sharedPreferences.getString("pref_login", "");
         String password = sharedPreferences.getString("pref_password", "");
 
-        Gson gson = new GsonBuilder().setDateFormat("yyy-MM-dd'T'HH:mm:ss").create();
+        Gson gson = new GsonBuilder().setDateFormat(MainActivity.DATE_FORMAT).create();
         String meetingJSON = gson.toJson(meeting);
 
         if (!login.equals("") && !password.equals("")) {

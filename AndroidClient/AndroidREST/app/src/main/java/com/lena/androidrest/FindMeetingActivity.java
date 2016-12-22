@@ -1,6 +1,8 @@
 package com.lena.androidrest;
 
+import android.app.DatePickerDialog;
 import android.app.FragmentManager;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
+
+import com.lena.androidrest.time.DatePickerFragment;
+import com.lena.androidrest.time.TimePickerFragment;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -17,12 +23,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class FindMeetingActivity extends AppCompatActivity {
+public class FindMeetingActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener,
+        DatePickerDialog.OnDateSetListener {
     public static final String URL = "FindMeetingActivityURL";
     private static final String URL_POSTFIX = "search/?";
     private static final String URL_WORDS_POSTFIX = "words=";
     private static final String URL_DATE_POSTFIX = "date=";
     private Date date;
+    private int mYear;
+    private int mMonthOfYear;
+    private int mDayOfMonth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +101,7 @@ public class FindMeetingActivity extends AppCompatActivity {
     private String encodeToTransferAsURLParameter(Date date) {
         try {
             if (date != null) {
-                DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ss");
+                DateFormat dateFormat = new SimpleDateFormat(MainActivity.DATE_FORMAT);
                 return URLEncoder.encode(dateFormat.format(date), "UTF-8");
             }
         } catch (UnsupportedEncodingException e) {
@@ -101,12 +111,29 @@ public class FindMeetingActivity extends AppCompatActivity {
         return null;
     }
 
+    @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, monthOfYear, dayOfMonth, 0, 0);
-        date = calendar.getTime();
+        FragmentManager fragmentManager = getFragmentManager();
+        TimePickerFragment timePickerFragment = new TimePickerFragment();
 
-        TextView startDateTextView = (TextView) findViewById(R.id.find_set_date_label_textView);
-        startDateTextView.setText(dayOfMonth + "." + String.valueOf(monthOfYear + 1) + "." + year);
+        if (fragmentManager.findFragmentByTag(getString(R.string.find_date_label)) != null) {
+            mYear = year;
+            mMonthOfYear = monthOfYear;
+            mDayOfMonth = dayOfMonth;
+            timePickerFragment.show(fragmentManager, getString(R.string.find_date_label));
+        }
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Calendar calendar = Calendar.getInstance();
+        DateFormat dateFormat = new SimpleDateFormat(MainActivity.BEAUTY_DATE_FORMAT);
+        if (getFragmentManager().findFragmentByTag(getString(R.string.find_date_label)) != null) {
+            calendar.set(mYear, mMonthOfYear, mDayOfMonth, hourOfDay, minute);
+            date = calendar.getTime();
+            String startDateString = dateFormat.format(date);
+            TextView startDateTextView = (TextView) findViewById(R.id.find_set_date_label_textView);
+            startDateTextView.setText(startDateString);
+        }
     }
 }

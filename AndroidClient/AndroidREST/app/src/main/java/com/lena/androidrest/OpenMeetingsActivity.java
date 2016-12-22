@@ -101,7 +101,7 @@ public class OpenMeetingsActivity extends AppCompatActivity implements GetTask.M
 
                     Context context = getApplicationContext();
                     Intent intent = new Intent(context, ShowMeetingActivity.class);
-                    Gson gson = new GsonBuilder().setDateFormat("yyy-MM-dd'T'HH:mm:ss").create();
+                    Gson gson = new GsonBuilder().setDateFormat(MainActivity.DATE_FORMAT).create();
                     intent.putExtra(context.getString(R.string.meeting), gson.toJson(currentMeeting));
                     startActivity(intent);
                 }

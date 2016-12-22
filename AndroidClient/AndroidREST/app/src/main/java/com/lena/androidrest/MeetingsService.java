@@ -17,7 +17,6 @@ import com.lena.androidrest.dataobjects.Meeting;
 import com.lena.androidrest.net.GetTask;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class MeetingsService extends IntentService implements GetTask.MyAsyncResponse {
     NotificationManager notificationManager;
@@ -42,65 +41,24 @@ public class MeetingsService extends IntentService implements GetTask.MyAsyncRes
         id = 0;
     }
 
-    @Override
+   /* @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         Log.d(MainActivity.LOG_TAG, "start command zzz");
         return START_NOT_STICKY;//START_STICKY tells the OS to recreate the service after it has enough
-                            // memory and call onStartCommand() again with a null intent
+        // memory and call onStartCommand() again with a null intent
 
-                            //START_REDELIVER_INTENT -  tells the OS to recreate
-                            // the service AND redelivery the same intent to onStartCommand()
+        //START_REDELIVER_INTENT -  tells the OS to recreate
+        // the service AND redelivery the same intent to onStartCommand()
 
-                            //START_NOT_STICKY - tells the OS to not bother recreating the service again
+        //START_NOT_STICKY - tells the OS to not bother recreating the service again
     }
-
+*/
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(MainActivity.LOG_TAG, "onHandleIntent");
-        if (intent == null) {
-            while (true) {
-                Log.d(MainActivity.LOG_TAG, "onHandleIntent: null intent - notif on");
-                checkNewMeetings(getApplicationContext());
+        checkNewMeetings(getApplicationContext());
 
-                //sleep
-                try {
-                    TimeUnit.SECONDS.sleep(MINUTES_TO_SLEEP);//MINUTES.sleep(MINUTES_TO_SLEEP);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else {
-            String app = intent.getStringExtra("app");
-
-            if (app.equals("off")) {
-                while (true) {
-                    Log.d(MainActivity.LOG_TAG, "onHandleIntent: intent app off, notif on");
-                    checkNewMeetings(getApplicationContext());
-
-                    //sleep
-                    try {
-                        TimeUnit.SECONDS.sleep(MINUTES_TO_SLEEP);//MINUTES.sleep(MINUTES_TO_SLEEP);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            else {
-                Log.d(MainActivity.LOG_TAG, "onHandleIntent: app is on, NO notif");
-
-                while (true) {
-                    //sleep
-                    try {
-                        TimeUnit.HOURS.sleep(1000);//MINUTES.sleep(MINUTES_TO_SLEEP);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-        }
     }
 
     private void prepareMyNotification(Meeting meeting) {

@@ -1,6 +1,8 @@
 package com.lena.androidrest;
 
+import android.app.DatePickerDialog;
 import android.app.FragmentManager;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,21 +16,33 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.lena.androidrest.dataobjects.Meeting;
 import com.lena.androidrest.net.PutTask;
+import com.lena.androidrest.time.DatePickerFragment;
+import com.lena.androidrest.time.TimePickerFragment;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class CreateMeetingActivity extends AppCompatActivity {//implements GetTask.MyAsyncResponse {
+public class CreateMeetingActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener,
+        DatePickerDialog.OnDateSetListener {//implements GetTask.MyAsyncResponse {
     private static final String URL = MainActivity.URL + "send-meeting";
     private Button createButton;
     private Context mContext;
+    private int startYear;
+    private int startMonthOfYear;
+    private int startDayOfMonth;
+    private int endYear;
+    private int endMonthOfYear;
+    private int endDayOfMonth;
     private Date startDate;
     private Date endDate;
 
@@ -84,22 +98,50 @@ public class CreateMeetingActivity extends AppCompatActivity {//implements GetTa
         super.onResume();
     }
 
-    public void onStartDataSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, monthOfYear, dayOfMonth, 0, 0);
-        startDate = calendar.getTime();
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        FragmentManager fragmentManager = getFragmentManager();
+        TimePickerFragment timePickerFragment = new TimePickerFragment();
 
-        TextView startDateTextView = (TextView) findViewById(R.id.meeting_start_date_textview);
-        startDateTextView.setText(dayOfMonth + "." + String.valueOf(monthOfYear + 1) + "." + year);
+        if (fragmentManager.findFragmentByTag(getString(R.string.meeting_enter_start_date)) != null) {
+            startYear = year;
+            startMonthOfYear = monthOfYear;
+            startDayOfMonth = dayOfMonth;
+            timePickerFragment.show(fragmentManager, getString(R.string.meeting_enter_start_date));
+        }
+        else if (fragmentManager.findFragmentByTag(getString(R.string.meeting_enter_end_date)) != null) {
+            endYear = year;
+            endMonthOfYear = monthOfYear;
+            endDayOfMonth = dayOfMonth;
+            timePickerFragment.show(fragmentManager, getString(R.string.meeting_enter_end_date));
+        }
+        /*else if (fragmentManager.findFragmentByTag(getString(R.string.find_date_label)) != null) {
+            endYear = year;
+            endMonthOfYear = monthOfYear;
+            endDayOfMonth = dayOfMonth;
+            timePickerFragment.show(fragmentManager, getString(R.string.record_end_time));
+            ((FindMeetingActivity) getActivity()).onDateSet(view, year, monthOfYear, dayOfMonth);
+        }*/
     }
 
-    public void onEndDataSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(year, monthOfYear, dayOfMonth, 0, 0);
-        endDate = calendar.getTime();
-
-        TextView endDateTextView = (TextView) findViewById(R.id.meeting_end_date_textview);
-        endDateTextView.setText(dayOfMonth + "." + String.valueOf(monthOfYear + 1) + "." + year);
+        DateFormat dateFormat = new SimpleDateFormat(MainActivity.BEAUTY_DATE_FORMAT);
+        if (getFragmentManager().findFragmentByTag(getString(R.string.meeting_enter_start_date)) != null) {
+            calendar.set(startYear, startMonthOfYear, startDayOfMonth, hourOfDay, minute);
+            startDate = calendar.getTime();
+            String startDateString = dateFormat.format(startDate);
+            TextView startDateTextView = (TextView) findViewById(R.id.meeting_start_date_textview);
+            startDateTextView.setText(startDateString);
+        }
+        else if (getFragmentManager().findFragmentByTag(getString(R.string.meeting_enter_end_date)) != null) {
+            calendar.set(endYear, endMonthOfYear, endDayOfMonth, hourOfDay, minute);
+            endDate = calendar.getTime();
+            String endDateString = dateFormat.format(endDate);
+            TextView endDateTextView = (TextView) findViewById(R.id.meeting_end_date_textview);
+            endDateTextView.setText(endDateString);
+        }
     }
 
     private Meeting prepareNewMeeting(Context context) {
@@ -127,7 +169,7 @@ public class CreateMeetingActivity extends AppCompatActivity {//implements GetTa
     }
 
     private String meetingToJSON(Meeting meeting) {
-        Gson gson = new GsonBuilder().setDateFormat("yyy-MM-dd'T'HH:mm:ss").create();
+        Gson gson = new GsonBuilder().setDateFormat(MainActivity.DATE_FORMAT).create();
         String meetingJSON = gson.toJson(meeting);
 
         Log.i("GSON", gson.toJson(meetingJSON));
@@ -150,6 +192,4 @@ public class CreateMeetingActivity extends AppCompatActivity {//implements GetTa
             Toast.makeText(context, R.string.meeting_fill_serverdata, Toast.LENGTH_LONG).show();
         }
     }
-
-
 }
